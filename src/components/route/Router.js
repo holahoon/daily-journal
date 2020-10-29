@@ -11,17 +11,23 @@ function AppRouter() {
   console.log("router: ", user);
   return (
     <Router>
-      {user ? (
-        <Auth />
+      {!user ? (
+        <>
+          <Route path='/auth' exact>
+            <Auth />
+          </Route>
+        </>
       ) : (
-        <Switch>
-          <Route path='/' exact>
-            <Home />
-          </Route>
-          <Route path='/write'>
-            <Write />
-          </Route>
-        </Switch>
+        <>
+          <Switch>
+            <Route path='/' exact>
+              <Home />
+            </Route>
+            <Route path='/write'>
+              <Write />
+            </Route>
+          </Switch>
+        </>
       )}
     </Router>
   );
