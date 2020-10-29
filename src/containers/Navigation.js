@@ -1,9 +1,11 @@
+import Authentication from "components/authentication/Authentication";
+
 function Navigation() {
   return (
     <header>
       <nav>
         <div>logo</div>
-        <div>authentication</div>
+        <Authentication />
       </nav>
     </header>
   );
