@@ -1,8 +1,10 @@
+import AppRouter from "containers/Router";
+
 function App() {
   return (
-    <div>
-      <h1>Daily Journal</h1>
-    </div>
+    <>
+      <AppRouter />
+    </>
   );
 }
 
