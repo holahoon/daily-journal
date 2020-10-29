@@ -9,7 +9,6 @@ function ContentCard({ dateObject, contentObject }) {
   const current_minute = getDate("MINUTE");
   const current_term = getDate("TERM");
 
-  console.log(getDate("HOUR"));
   return (
     <div>
       <h2>

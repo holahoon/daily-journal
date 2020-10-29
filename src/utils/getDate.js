@@ -44,7 +44,7 @@ export const getDate = (dateType) => {
     case DAY:
       return dayArray[d.getDay()];
     case HOUR:
-      return d.getHours() > 12 ? `0${d.getHours() - 12}` : `${d.getHours()}`;
+      return d.getHours() < 12 ? `0${d.getHours()}` : `${d.getHours() - 12}`;
     case MINUTE:
       return `${d.getMinutes()}`;
     case TERM:

@@ -1,34 +1,28 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import { useAuthStateValue } from "hooks/context/AuthStateProvider";
-import Auth from "containers/Auth";
+// import GuardedRoute from "utils/hoc/GuardedRoute";
+import Navigation from "containers/Navigation";
 import Home from "containers/Home";
 import Write from "containers/Write";
+import Auth from "containers/Auth";
 
-function AppRouter() {
-  const { user } = useAuthStateValue()[0];
-
-  console.log("router: ", user);
+function AppRouter({ userDataObject }) {
   return (
     <Router>
-      {!user ? (
-        <>
-          <Route path='/auth' exact>
-            <Auth />
-          </Route>
-        </>
-      ) : (
-        <>
-          <Switch>
-            <Route path='/' exact>
-              <Home />
-            </Route>
-            <Route path='/write'>
-              <Write />
-            </Route>
-          </Switch>
-        </>
-      )}
+      <Navigation />
+
+      <Switch>
+        <Route path='/' exact>
+          <Home />
+        </Route>
+        <Route path='/write'>
+          <Write />
+        </Route>
+        {/* <GuardedRoute path='/auth' component={Auth} auth={true} /> */}
+        <Route path='/auth'>
+          <Auth userDataObject={userDataObject} />
+        </Route>
+      </Switch>
     </Router>
   );
 }
