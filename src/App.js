@@ -26,6 +26,7 @@ function App() {
     });
   }, [dispatch]);
 
+  console.log("[App.js] ", userData);
   return (
     <>
       <AppRouter userData={userData} />

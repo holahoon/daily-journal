@@ -4,7 +4,7 @@ import { Redirect } from "react-router-dom";
 import useAuthState from "hooks/useState/useAuthState";
 import { authService } from "utils/firebaseInstance";
 
-function Auth({ userDataObject }) {
+function Auth({ userData }) {
   const [form, onChangeHandler] = useAuthState({
     userName: "",
     email: "",
@@ -43,7 +43,7 @@ function Auth({ userDataObject }) {
 
   return (
     <>
-      {userDataObject ? (
+      {userData ? (
         // Redirect the user to the main page if the user is already || has logged in || just signed up
         <Redirect to='/' />
       ) : (
