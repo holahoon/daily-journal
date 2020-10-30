@@ -44,6 +44,7 @@ function Auth({ userDataObject }) {
   return (
     <>
       {userDataObject ? (
+        // Redirect the user to the main page if the user is already || has logged in || just signed up
         <Redirect to='/' />
       ) : (
         <>

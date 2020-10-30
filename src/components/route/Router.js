@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-// import GuardedRoute from "utils/hoc/GuardedRoute";
 import Navigation from "containers/Navigation";
 import Home from "containers/Home";
 import Write from "containers/Write";
 import Auth from "containers/Auth";
+import Invalid404 from "containers/Invalid404";
 
 function AppRouter({ userDataObject }) {
   return (
@@ -18,10 +18,10 @@ function AppRouter({ userDataObject }) {
         <Route path='/write'>
           <Write />
         </Route>
-        {/* <GuardedRoute path='/auth' component={Auth} auth={true} /> */}
         <Route path='/auth'>
           <Auth userDataObject={userDataObject} />
         </Route>
+        <Route component={Invalid404} />
       </Switch>
     </Router>
   );

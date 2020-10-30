@@ -1,25 +1,34 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
+import { useAuthStateValue } from "hooks/context/AuthStateProvider";
+import { SET_USER, SET_USER_FAIL } from "hooks/actionType/actionType";
 import { authService } from "utils/firebaseInstance";
 import AppRouter from "components/route/Router";
 
 function App() {
-  const [userDataObject, setUserDataObject] = useState(null);
+  const [{ userData }, dispatch] = useAuthStateValue();
+
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
-      console.log(user);
-      // check if the user is logged in (user object should not be null)
+      // - Check if the user is logged in (user object should not be null)
       if (user) {
-        setUserDataObject({
-          uid: user.uid,
+        // - If user if found (logged in)
+        dispatch({
+          type: SET_USER,
+          userData: user,
+        });
+      } else {
+        // - If no user is return (failed - not logged in)
+        dispatch({
+          type: SET_USER_FAIL,
         });
       }
     });
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
-      <AppRouter userDataObject={userDataObject} />
+      <AppRouter userData={userData} />
     </>
   );
 }
