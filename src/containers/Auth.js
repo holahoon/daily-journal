@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Redirect } from "react-router-dom";
 
+import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 import useAuthState from "hooks/useState/useAuthState";
 import { authService } from "utils/firebaseInstance";
 
-function Auth({ userData }) {
+function Auth() {
+  const { userData } = useAuthStateValue()[0];
   const [form, onChangeHandler] = useAuthState({
     userName: "",
     email: "",
@@ -15,26 +17,32 @@ function Auth({ userData }) {
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
-
     const { userName, email, password } = form;
 
     if (isNewAccount) {
-      // - Sign up
-      authService
-        .createUserWithEmailAndPassword(email, password)
-        .then((authUser) => {
-          return authUser.user.updateProfile({
-            displayName: userName,
-          });
-        })
-        .catch((error) => setAuthError(error.message));
+      // - Handle sign up
+      signUpHandler(email, password, userName);
     } else {
-      // - Log in
-      authService
-        .signInWithEmailAndPassword(email, password)
-        .then()
-        .catch((error) => setAuthError(error.message));
+      // - Handle log in
+      logInHander(email, password);
     }
+  };
+
+  const signUpHandler = (email, password, userName) => {
+    authService
+      .createUserWithEmailAndPassword(email, password)
+      .then((authUser) => {
+        // Update displayName when signing up
+        return authUser.user.updateProfile({ displayName: userName });
+      })
+      .catch((error) => setAuthError(error.message));
+  };
+
+  const logInHander = (email, password) => {
+    authService
+      .signInWithEmailAndPassword(email, password)
+      .then()
+      .catch((error) => setAuthError(error.message));
   };
 
   const toggleAuthMethod = () => {

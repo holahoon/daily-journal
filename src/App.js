@@ -6,13 +6,14 @@ import { authService } from "utils/firebaseInstance";
 import AppRouter from "components/route/Router";
 
 function App() {
-  const [{ userData }, dispatch] = useAuthStateValue();
+  const dispatch = useAuthStateValue()[1];
 
   useEffect(() => {
+    // - Check if the user is logged in (user object will return an object if logged in)
     authService.onAuthStateChanged((user) => {
-      // - Check if the user is logged in (user object should not be null)
+      // - Dispatch an action here instead in the Auth.js login/signup handlers because this method will re-run whenever the authentication state changes in firebase
       if (user) {
-        // - If user if found (logged in)
+        // - If user is found (logged in)
         dispatch({
           type: SET_USER,
           userData: user,
@@ -26,10 +27,9 @@ function App() {
     });
   }, [dispatch]);
 
-  console.log("[App.js] ", userData);
   return (
     <>
-      <AppRouter userData={userData} />
+      <AppRouter />
     </>
   );
 }

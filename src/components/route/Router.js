@@ -6,7 +6,7 @@ import Write from "containers/Write";
 import Auth from "containers/Auth";
 import Invalid404 from "containers/Invalid404";
 
-function AppRouter({ userData }) {
+function AppRouter() {
   return (
     <Router>
       <Navigation />
@@ -19,7 +19,7 @@ function AppRouter({ userData }) {
           <Write />
         </Route>
         <Route path='/auth'>
-          <Auth userData={userData} />
+          <Auth />
         </Route>
         <Route path='*' component={Invalid404} />
       </Switch>
