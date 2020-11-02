@@ -32,24 +32,28 @@ export const getDate = (dateType) => {
     "Saturday",
   ];
 
-  const d = new Date();
+  const currentTime = new Date();
 
   switch (dateType) {
     case YEAR:
-      return d.getUTCFullYear();
+      return currentTime.getUTCFullYear();
     case MONTH:
-      return monthArray[d.getUTCMonth()];
+      return monthArray[currentTime.getUTCMonth()];
     case DATE:
-      return d.getUTCDate();
+      return currentTime.getUTCDate();
     case DAY:
-      return dayArray[d.getDay()];
+      return dayArray[currentTime.getDay()];
     case HOUR:
-      return d.getHours() < 12 ? `${d.getHours()}` : `0${d.getHours() - 12}`;
+      let currentHours = currentTime.getHours();
+      currentHours = ("0" + currentHours).slice(-2);
+      return currentHours < 12 ? currentHours : currentHours - 12;
     case MINUTE:
-      return `${d.getMinutes()}`;
+      return currentTime.getMinutes() < 10
+        ? `0${currentTime.getMinutes()}`
+        : `${currentTime.getMinutes()}`;
     case TERM:
-      return d.getHours() < 12 ? "AM" : "PM";
+      return currentTime.getHours() < 12 ? "AM" : "PM";
     default:
-      return d;
+      return currentTime;
   }
 };

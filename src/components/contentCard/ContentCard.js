@@ -1,7 +1,10 @@
 import { getDate } from "utils/getDate";
-import { Card, CardContent, Typography, Button } from "@material-ui/core";
+import { Card, List, ListItem, CardContent } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Edit, Delete } from "@material-ui/icons";
+
+import CardDate from "components/contentCard/cardDate/CardDate";
+import CardListContent from "components/contentCard/cardListContent/CardListContent";
+import CardButton from "components/contentCard/cardButton/CardButton";
 
 export default function ContentCard({ dateObject, contentArray }) {
   const current_year = getDate("YEAR");
@@ -14,51 +17,50 @@ export default function ContentCard({ dateObject, contentArray }) {
 
   const classes = useStyles();
 
-  console.log(contentArray);
+  const onToggleModalHandler = () => {
+    console.log("modal clicked");
+  };
+
+  const onEditHandler = () => {
+    console.log("editing");
+  };
+
+  const onDeleteHandler = () => {
+    console.log("deleting");
+  };
+
   return (
     <Card className={classes.cardContainer}>
       <CardContent>
-        <Typography variant='h5' component='h2' className={classes.cardDate}>
-          {current_date} {current_month} {current_year}, {current_day}
-        </Typography>
+        <CardDate
+          classes={classes}
+          year={current_year}
+          month={current_month}
+          date={current_date}
+          day={current_day}
+        />
 
-        <ul>
-          {contentArray.map(({ title, description }, i) => (
-            <Typography component='li' key={i} className={classes.cardLi}>
-              <div>
-                <Typography
-                  variant='h6'
-                  component='h3'
-                  className={classes.cardTitle}
-                >
-                  {title}
-                  <Typography
-                    variant='body2'
-                    component='span'
-                    className={classes.cardTime}
-                  >
-                    ({current_hour}:{current_minute} {current_term})
-                  </Typography>
-                </Typography>
-                <Typography
-                  variant='body1'
-                  component='p'
-                  className={classes.cardDescription}
-                >
-                  {description}
-                </Typography>
-              </div>
-              <div>
-                <Button className={classes.cardButton}>
-                  <Edit className={classes.cardEdit} />
-                </Button>
-                <Button className={classes.cardButton}>
-                  <Delete className={classes.cardDelete} />
-                </Button>
-              </div>
-            </Typography>
+        <List className={classes.list}>
+          {contentArray.map(({ editedTime, description }, i) => (
+            <ListItem key={i} className={classes.cardListItem}>
+              <CardListContent
+                classes={classes}
+                editedTime={editedTime}
+                description={description}
+                hour={current_hour}
+                minute={current_minute}
+                term={current_term}
+                onToggleModal={onToggleModalHandler}
+              />
+
+              <CardButton
+                classes={classes}
+                onEdit={onEditHandler}
+                onDelete={onDeleteHandler}
+              />
+            </ListItem>
           ))}
-        </ul>
+        </List>
       </CardContent>
     </Card>
   );
@@ -69,24 +71,42 @@ const useStyles = makeStyles({
     width: "40vw",
     marginBottom: "10px",
   },
-  cardLi: {
+  list: {
+    paddingLeft: "0",
+  },
+  date: {
+    color: "#98CDC6",
+    marginRight: "5px",
+  },
+  day: {
+    color: "#CFB491",
+  },
+  cardListItem: {
     display: "flex",
-    alignItems: "center",
+    alignItems: "flex-start",
     justifyContent: "space-between",
-    marginBottom: "10px",
+    padding: "0",
+  },
+  cardContent: {
+    width: "100%",
+  },
+  cardContentButton: {
+    padding: "10px",
   },
   cardDate: {
+    padding: "0 5px",
     fontSize: "1.3rem",
-  },
-  cardTitle: {
-    fontSize: "1.15rem",
+    fontWeight: "bold",
+    color: "#3d3d3d",
   },
   cardTime: {
-    marginLeft: "10px",
-    color: "#A4A9A7",
+    fontSize: "0.95rem",
+    fontWeight: "bold",
+    color: "#CFB491",
   },
   cardDescription: {
     fontSize: "1rem",
+    color: "#555555",
   },
   cardButton: {
     minWidth: "20px",
@@ -94,7 +114,7 @@ const useStyles = makeStyles({
   cardEdit: {
     width: "1rem",
     height: "1rem",
-    fill: "#AFEF8D",
+    fill: "#98CDC6",
   },
   cardDelete: {
     width: "1rem",

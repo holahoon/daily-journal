@@ -7,26 +7,27 @@ function Home() {
     {
       date: new Date(),
       contents: [
-        { title: "title 1", description: "blah blah blah" },
-        { title: "title 2", description: "blah blah blah" },
+        { editedTime: "edited", description: "blah blah blah" },
+        { editedTime: "editedTime 2", description: "blah blah blah" },
         {
-          title: "title 3",
-          description: "blah blah blah hahaha this is super fun",
+          editedTime: "editedTime 3",
+          description:
+            "blah blah blah hahaha this is super fun blah blah blah hahaha this is super fun blah blah blah hahaha this is super fun blah blah blah hahaha this is super fun blah blah blah hahaha this is super fun",
         },
       ],
     },
     {
       date: new Date(),
       contents: [
-        { title: "title 1", description: "blah blah blah" },
-        { title: "title 2", description: "blah blah blah" },
+        { editedTime: "editedTime 1", description: "blah blah blah" },
+        { editedTime: "editedTime 2", description: "blah blah blah" },
       ],
     },
     {
       date: new Date(),
       contents: [
-        { title: "title 1", description: "blah blah blah" },
-        { title: "title 2", description: "blah blah blah" },
+        { editedTime: "editedTime 1", description: "blah blah blah" },
+        { editedTime: "editedTime 2", description: "blah blah blah" },
       ],
     },
   ];
