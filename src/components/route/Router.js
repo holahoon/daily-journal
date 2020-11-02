@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Container } from "@material-ui/core";
 
 import Navigation from "containers/Navigation";
 import Home from "containers/Home";
@@ -11,18 +12,20 @@ function AppRouter() {
     <Router>
       <Navigation />
 
-      <Switch>
-        <Route path='/' exact>
-          <Home />
-        </Route>
-        <Route path='/write'>
-          <Write />
-        </Route>
-        <Route path='/auth'>
-          <Auth />
-        </Route>
-        <Route path='*' component={Invalid404} />
-      </Switch>
+      <Container>
+        <Switch>
+          <Route path='/' exact>
+            <Home />
+          </Route>
+          <Route path='/write'>
+            <Write />
+          </Route>
+          <Route path='/auth'>
+            <Auth />
+          </Route>
+          <Route path='*' component={Invalid404} />
+        </Switch>
+      </Container>
     </Router>
   );
 }

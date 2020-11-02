@@ -5,6 +5,8 @@ import { SET_USER, SET_USER_FAIL } from "hooks/actionType/actionType";
 import { authService } from "utils/firebaseInstance";
 import AppRouter from "components/route/Router";
 
+import "./App.css";
+
 function App() {
   const dispatch = useAuthStateValue()[1];
 

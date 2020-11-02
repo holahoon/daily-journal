@@ -6,7 +6,7 @@ function Navigation() {
   return (
     <header>
       <nav>
-        <Link to='/'>logo</Link>
+        <Link to='/'>MyBook</Link>
         <Link to='/write'>write</Link>
         <Authentication />
       </nav>
