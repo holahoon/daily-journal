@@ -6,7 +6,12 @@ import CardDate from "components/contentCard/cardDate/CardDate";
 import CardListContent from "components/contentCard/cardListContent/CardListContent";
 import CardButton from "components/contentCard/cardButton/CardButton";
 
-export default function ContentCard({ dateObject, contentArray }) {
+export default function ContentCard({
+  contentArray,
+  onToggleModal,
+  onEdit,
+  onDelete,
+}) {
   const current_year = getDate("YEAR");
   const current_month = getDate("MONTH");
   const current_date = getDate("DATE");
@@ -16,18 +21,6 @@ export default function ContentCard({ dateObject, contentArray }) {
   const current_term = getDate("TERM");
 
   const classes = useStyles();
-
-  const onToggleModalHandler = () => {
-    console.log("modal clicked");
-  };
-
-  const onEditHandler = () => {
-    console.log("editing");
-  };
-
-  const onDeleteHandler = () => {
-    console.log("deleting");
-  };
 
   return (
     <Card className={classes.cardContainer}>
@@ -50,13 +43,13 @@ export default function ContentCard({ dateObject, contentArray }) {
                 hour={current_hour}
                 minute={current_minute}
                 term={current_term}
-                onToggleModal={onToggleModalHandler}
+                onToggleModal={onToggleModal}
               />
 
               <CardButton
                 classes={classes}
-                onEdit={onEditHandler}
-                onDelete={onDeleteHandler}
+                onEdit={onEdit}
+                onDelete={onDelete}
               />
             </ListItem>
           ))}

@@ -1,38 +1,54 @@
-import CalendarComponent from "components/calcendar/CalendarComponent";
-import ContentCard from "components/contentCard/ContentCard";
+import { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
-function Home() {
-  const testData = [
-    {
-      date: new Date(),
-      contents: [
-        { editedTime: "edited", description: "blah blah blah" },
-        { editedTime: "editedTime 2", description: "blah blah blah" },
-        {
-          editedTime: "editedTime 3",
-          description:
-            "blah blah blah hahaha this is super fun blah blah blah hahaha this is super fun blah blah blah hahaha this is super fun blah blah blah hahaha this is super fun blah blah blah hahaha this is super fun",
-        },
-      ],
-    },
-    {
-      date: new Date(),
-      contents: [
-        { editedTime: "editedTime 1", description: "blah blah blah" },
-        { editedTime: "editedTime 2", description: "blah blah blah" },
-      ],
-    },
-    {
-      date: new Date(),
-      contents: [
-        { editedTime: "editedTime 1", description: "blah blah blah" },
-        { editedTime: "editedTime 2", description: "blah blah blah" },
-      ],
-    },
-  ];
+import CalendarComponent from "components/calendar/CalendarComponent";
+import ContentCard from "components/contentCard/ContentCard";
+import ContentModal from "components/contentModal/ContentModal";
 
+const testData = [
+  {
+    date: new Date(),
+    contents: [
+      { editedTime: "edited", description: "blah blah blah" },
+      { editedTime: "editedTime 2", description: "blah blah blah" },
+      {
+        editedTime: "editedTime 3",
+        description:
+          "blah blah blah hahaha this is super fun blah blah blah hahaha this is super fun blah blah blah hahaha this is super fun blah blah blah hahaha this is super fun blah blah blah hahaha this is super fun",
+      },
+    ],
+  },
+  {
+    date: new Date(),
+    contents: [
+      { editedTime: "editedTime 1", description: "blah blah blah" },
+      { editedTime: "editedTime 2", description: "blah blah blah" },
+    ],
+  },
+  {
+    date: new Date(),
+    contents: [
+      { editedTime: "editedTime 1", description: "blah blah blah" },
+      { editedTime: "editedTime 2", description: "blah blah blah" },
+    ],
+  },
+];
+
+function Home() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const classes = useStyles();
+
+  const onToggleModalHandler = () => {
+    setIsModalOpen((prev) => !prev);
+  };
+
+  const onEditHandler = () => {
+    console.log("editing");
+  };
+
+  const onDeleteHandler = () => {
+    console.log("deleting");
+  };
 
   return (
     <div className={classes.home}>
@@ -43,9 +59,18 @@ function Home() {
             key={i}
             dateObject={data.date}
             contentArray={data.contents}
+            onToggleModal={onToggleModalHandler}
+            onEdit={onEditHandler}
+            onDelete={onDeleteHandler}
           />
         ))}
       </div>
+
+      <ContentModal
+        testData={testData}
+        isModalOpen={isModalOpen}
+        onToggleModal={onToggleModalHandler}
+      />
     </div>
   );
 }

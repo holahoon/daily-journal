@@ -7,8 +7,6 @@ import "./calendarComponent.css";
 export default function CalendarComponent() {
   const [dateValue, setDateValue] = useState(new Date());
 
-  console.log(dateValue);
-
   return (
     <>
       <Calendar
