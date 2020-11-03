@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CalendarComponent from "components/calendar/CalendarComponent";
@@ -36,6 +37,7 @@ const testData = [
 
 function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const history = useHistory();
   const classes = useStyles();
 
   const onToggleModalHandler = () => {
@@ -43,7 +45,7 @@ function Home() {
   };
 
   const onEditHandler = () => {
-    console.log("editing");
+    history.push("/write");
   };
 
   const onDeleteHandler = () => {

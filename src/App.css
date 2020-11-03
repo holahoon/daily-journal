@@ -6,3 +6,12 @@ html,
 body {
   margin: 0;
 }
+
+input,
+textarea {
+  outline: none;
+}
+
+textarea {
+  resize: none;
+}
