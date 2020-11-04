@@ -1,40 +1,52 @@
 import { useState } from "react";
 import firebase from "firebase";
 import { makeStyles } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 
-import firebaseDB from "utils/firebaseInstance";
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
+import firebaseDB from "utils/firebaseInstance";
+import { getDate } from "utils/getDate";
 
 export default function Write() {
   const [messageInputValue, setMessageInputValue] = useState(
     "this is a sample"
   );
-  const [{ userData }, dispatch] = useAuthStateValue();
 
+  const { userData } = useAuthStateValue()[0];
+  const history = useHistory();
   const classes = useStyles();
 
   const onChangeHandler = (e) => {
     setMessageInputValue(e.target.value);
   };
 
-  const onSaveHandler = () => {
-    console.log(userData);
+  const onSaveHandler = async () => {
     if (userData) {
-      firebaseDB.collection("users").add({
-        journal: messageInputValue,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      });
-      // .doc(userData.uid)
-      // .collection("journals")
-      // .add({
-      //   journal: messageInputValue,
-      //   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      // });
+      const currentTime = getCurrentTime();
+      // Create a database collection as the following = [users] -> [userId] -> [year-month-date] -> {data object}
+      await firebaseDB
+        .collection("users")
+        .doc(userData.uid)
+        .collection(currentTime)
+        .add({
+          journal: messageInputValue,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+
+      // Push the user back to the main page when done
+      history.push("/");
     }
   };
 
   const onCancelHandler = () => {
     console.log("cancel");
+  };
+
+  const getCurrentTime = () => {
+    const current_year = getDate("YEAR");
+    const current_month = getDate("MONTH");
+    const current_date = getDate("DATE");
+    return `${current_year}-${current_month}-${current_date}`;
   };
 
   return (

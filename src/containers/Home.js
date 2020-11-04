@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 
 import CalendarComponent from "components/calendar/CalendarComponent";
 import ContentCard from "components/contentCard/ContentCard";
 import ContentModal from "components/contentModal/ContentModal";
+import firebaseDB from "utils/firebaseInstance";
+import { useAuthStateValue } from "hooks/context/AuthStateProvider";
+import { getDate } from "utils/getDate";
 
 const testData = [
   {
@@ -36,9 +39,30 @@ const testData = [
 ];
 
 function Home() {
+  const { userData } = useAuthStateValue()[0];
+  const [journalData, setJournaData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const history = useHistory();
   const classes = useStyles();
+
+  useEffect(() => {
+    if (userData) {
+      const currentTime = getCurrentTime();
+      firebaseDB
+        .collection("users")
+        .doc(userData.uid)
+        .collection(currentTime)
+        .orderBy("timestamp", "asc")
+        .onSnapshot(
+          (snapshot) =>
+            snapshot.docs.map((doc) => {
+              console.log(doc.data());
+              return doc.data();
+            })
+          // setRoomMessages(snapshot.docs.map((doc) => doc.data()))
+        );
+    }
+  }, []);
 
   const onToggleModalHandler = () => {
     setIsModalOpen((prev) => !prev);
@@ -50,6 +74,13 @@ function Home() {
 
   const onDeleteHandler = () => {
     console.log("deleting");
+  };
+
+  const getCurrentTime = () => {
+    const current_year = getDate("YEAR");
+    const current_month = getDate("MONTH");
+    const current_date = getDate("DATE");
+    return `${current_year}-${current_month}-${current_date}`;
   };
 
   return (

@@ -1,7 +1,7 @@
-import { getDate } from "utils/getDate";
 import { Card, List, ListItem, CardContent } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
+import { getDate } from "utils/getDate";
 import CardDate from "components/contentCard/cardDate/CardDate";
 import CardListContent from "components/contentCard/cardListContent/CardListContent";
 import CardButton from "components/contentCard/cardButton/CardButton";
