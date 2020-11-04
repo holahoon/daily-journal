@@ -1,23 +1,36 @@
 import { useState } from "react";
+import firebase from "firebase";
 import { makeStyles } from "@material-ui/core";
+
+import firebaseDB from "utils/firebaseInstance";
+import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 
 export default function Write() {
   const [messageInputValue, setMessageInputValue] = useState(
     "this is a sample"
   );
+  const [{ userData }, dispatch] = useAuthStateValue();
 
   const classes = useStyles();
 
   const onChangeHandler = (e) => {
-    const {
-      target: { value },
-    } = e;
-
-    setMessageInputValue(value);
+    setMessageInputValue(e.target.value);
   };
 
   const onSaveHandler = () => {
-    console.log("save");
+    console.log(userData);
+    if (userData) {
+      firebaseDB.collection("users").add({
+        journal: messageInputValue,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      });
+      // .doc(userData.uid)
+      // .collection("journals")
+      // .add({
+      //   journal: messageInputValue,
+      //   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      // });
+    }
   };
 
   const onCancelHandler = () => {

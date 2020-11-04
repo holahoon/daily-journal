@@ -1,5 +1,6 @@
 import { SET_USER, LOG_IN, LOG_OUT } from "hooks/actionType/actionType";
 
+// - Initial user state (expect to receive an object when the user is authenticated)
 export const initialState = {
   userData: null,
 };
