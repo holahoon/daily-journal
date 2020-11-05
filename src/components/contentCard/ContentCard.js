@@ -1,9 +1,19 @@
-import { Card, List, ListItem, CardContent } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import {
+  Card,
+  List,
+  ListItem,
+  Button,
+  CardContent,
+  CardMedia,
+  CardActionArea,
+  Typography,
+  makeStyles,
+} from "@material-ui/core";
+import { Edit, Delete } from "@material-ui/icons";
 
 import { getDate } from "utils/getDate";
 import CardDate from "components/contentCard/cardDate/CardDate";
-import CardListContent from "components/contentCard/cardListContent/CardListContent";
+// import CardListContent from "components/contentCard/cardListContent/CardListContent";
 import CardButton from "components/contentCard/cardButton/CardButton";
 
 export default function ContentCard({
@@ -22,39 +32,45 @@ export default function ContentCard({
 
   const classes = useStyles();
 
-  console.log(journalData);
+  console.log(journalData.timestamp.toDate());
+
   return (
     <Card className={classes.cardContainer}>
       <CardContent>
-        <CardDate
-          classes={classes}
-          year={current_year}
-          month={current_month}
-          date={current_date}
-          day={current_day}
-        />
-        {/* 
-        <List className={classes.list}>
-          {contentArray.map(({ editedTime, description }, i) => (
-            <ListItem key={i} className={classes.cardListItem}>
-              <CardListContent
-                classes={classes}
-                editedTime={editedTime}
-                description={description}
-                hour={current_hour}
-                minute={current_minute}
-                term={current_term}
-                onToggleModal={onToggleModal}
-              />
+        {/* Card date */}
+        <Typography variant='h5' component='h2' className={classes.cardDate}>
+          <span className={classes.date}>{current_date}</span> {current_month}{" "}
+          {current_year}, <span className={classes.day}>{current_day}</span>
+        </Typography>
 
-              <CardButton
-                classes={classes}
-                onEdit={onEdit}
-                onDelete={onDelete}
-              />
-            </ListItem>
-          ))}
-        </List> */}
+        {/* Card content */}
+        <CardMedia className={classes.cardContent}>
+          <CardActionArea
+            className={classes.cardContentButton}
+            onClick={onToggleModal}
+          >
+            <Typography
+              variant='h6'
+              component='h3'
+              className={classes.cardTime}
+            >
+              {journalData.journal}
+            </Typography>
+            <Typography
+              variant='body1'
+              component='p'
+              className={classes.cardDescription}
+            ></Typography>
+          </CardActionArea>
+
+          {/* Buttons */}
+          <Button className={classes.cardButton} onClick={onEdit}>
+            <Edit className={classes.cardEdit} />
+          </Button>
+          <Button className={classes.cardButton} onClick={onDelete}>
+            <Delete className={classes.cardDelete} />
+          </Button>
+        </CardMedia>
       </CardContent>
     </Card>
   );
@@ -75,14 +91,11 @@ const useStyles = makeStyles({
   day: {
     color: "#CFB491",
   },
-  cardListItem: {
+  cardContent: {
+    width: "100%",
     display: "flex",
     alignItems: "flex-start",
     justifyContent: "space-between",
-    padding: "0",
-  },
-  cardContent: {
-    width: "100%",
   },
   cardContentButton: {
     padding: "10px",

@@ -22,7 +22,8 @@ export default function Write() {
 
   const onSaveHandler = async () => {
     if (userData) {
-      const currentTime = getCurrentTime();
+      // const currentTime = getCurrentTime();
+      const currentTime = new Date();
       // Create a database collection as the following = [users] -> [userId] -> [year-month-date] -> {data object}
       await firebaseDB
         .collection("users")
@@ -32,6 +33,7 @@ export default function Write() {
         .add({
           journal: messageInputValue,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          // timestamp: currentTime,
         });
 
       // Push the user back to the main page when done
