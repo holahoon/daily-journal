@@ -40,7 +40,7 @@ const testData = [
 
 function Home() {
   const { userData } = useAuthStateValue()[0];
-  const [journalData, setJournaData] = useState([]);
+  const [journalData, setJournalData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const history = useHistory();
   const classes = useStyles();
@@ -48,21 +48,18 @@ function Home() {
   useEffect(() => {
     if (userData) {
       const currentTime = getCurrentTime();
+      // const uid = firebaseDB.collection('users').doc(userData.uid)
       firebaseDB
         .collection("users")
         .doc(userData.uid)
-        .collection(currentTime)
+        // .collection(currentTime)
+        .collection("daily-journals")
         .orderBy("timestamp", "asc")
-        .onSnapshot(
-          (snapshot) =>
-            snapshot.docs.map((doc) => {
-              console.log(doc.data());
-              return doc.data();
-            })
-          // setRoomMessages(snapshot.docs.map((doc) => doc.data()))
+        .onSnapshot((snapshot) =>
+          setJournalData(snapshot.docs.map((doc) => doc.data()))
         );
     }
-  }, []);
+  }, [userData]);
 
   const onToggleModalHandler = () => {
     setIsModalOpen((prev) => !prev);
@@ -87,11 +84,10 @@ function Home() {
     <div className={classes.home}>
       <CalendarComponent />
       <div className={classes.cardContainer}>
-        {testData.map((data, i) => (
+        {journalData.map((data, i) => (
           <ContentCard
             key={i}
-            dateObject={data.date}
-            contentArray={data.contents}
+            journalData={data}
             onToggleModal={onToggleModalHandler}
             onEdit={onEditHandler}
             onDelete={onDeleteHandler}
@@ -100,7 +96,7 @@ function Home() {
       </div>
 
       <ContentModal
-        testData={testData}
+        journalData={journalData}
         isModalOpen={isModalOpen}
         onToggleModal={onToggleModalHandler}
       />

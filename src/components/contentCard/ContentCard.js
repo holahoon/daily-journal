@@ -7,7 +7,7 @@ import CardListContent from "components/contentCard/cardListContent/CardListCont
 import CardButton from "components/contentCard/cardButton/CardButton";
 
 export default function ContentCard({
-  contentArray,
+  journalData,
   onToggleModal,
   onEdit,
   onDelete,
@@ -22,6 +22,7 @@ export default function ContentCard({
 
   const classes = useStyles();
 
+  console.log(journalData);
   return (
     <Card className={classes.cardContainer}>
       <CardContent>
@@ -32,7 +33,7 @@ export default function ContentCard({
           date={current_date}
           day={current_day}
         />
-
+        {/* 
         <List className={classes.list}>
           {contentArray.map(({ editedTime, description }, i) => (
             <ListItem key={i} className={classes.cardListItem}>
@@ -53,7 +54,7 @@ export default function ContentCard({
               />
             </ListItem>
           ))}
-        </List>
+        </List> */}
       </CardContent>
     </Card>
   );

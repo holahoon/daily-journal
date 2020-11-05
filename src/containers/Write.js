@@ -27,7 +27,8 @@ export default function Write() {
       await firebaseDB
         .collection("users")
         .doc(userData.uid)
-        .collection(currentTime)
+        // .collection(currentTime)
+        .collection("daily-journals")
         .add({
           journal: messageInputValue,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),

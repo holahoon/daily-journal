@@ -1,6 +1,6 @@
 import { makeStyles, Modal, Fade, Backdrop } from "@material-ui/core";
 
-export default function ContentModal({ testData, isModalOpen, onToggleModal }) {
+export default function ContentModal({ userData, isModalOpen, onToggleModal }) {
   const classes = useStyles();
 
   // console.log(testData);
