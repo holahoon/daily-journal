@@ -20,17 +20,10 @@ export default function Write() {
   };
 
   const onCancelHandler = () => {
-    console.log("cancel");
-  };
-
-  const onSubmitHandler = () => {
-    onSave();
-
-    // // Push the user back to the main page when done
     history.push("/");
   };
 
-  const onSave = () => {
+  const onSaveHandler = () => {
     if (userData) {
       // Create a database collection as the following = [users] -> [userId] -> [daily-journals] -> {data object}
       firebaseDB
@@ -40,14 +33,15 @@ export default function Write() {
         .add({
           journal: messageInputValue,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        });
+        })
+        .then(() => history.push("/"));
     }
   };
 
   return (
     <div>
       <div>
-        <button onClick={onSubmitHandler}>save</button>
+        <button onClick={onSaveHandler}>save</button>
         <button onClick={onCancelHandler}>cancel</button>
       </div>
 

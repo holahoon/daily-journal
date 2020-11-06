@@ -1,3 +1,4 @@
+import { useEffect, memo } from "react";
 import {
   Card,
   Button,
@@ -19,23 +20,28 @@ export default function ContentCard({
 }) {
   const classes = useStyles();
 
-  // const getDatesFromData = (data) => {
-  //   const dateData = new Date(data.timestamp.seconds * 1000);
-  //   return {
-  //     year: getDate(dateData, "YEAR"),
-  //     month: getDate(dateData, "MONTH"),
-  //     date: getDate(dateData, "DATE"),
-  //     day: getDate(dateData, "DAY"),
-  //     hour: getDate(dateData, "HOUR"),
-  //     minute: getDate(dateData, "MINUTE"),
-  //     term: getDate(dateData, "TERM"),
-  //   };
-  // };
+  useEffect(() => {
+    journalData && getDatesFromData(journalData);
+  }, [journalData]);
 
-  // const { year, month, date, day, hour, minute, term } = getDatesFromData(
-  //   journalData
-  // );
+  const getDatesFromData = (data) => {
+    const dateData = new Date(data.data.timestamp?.seconds * 1000);
+    return {
+      year: getDate(dateData, "YEAR"),
+      month: getDate(dateData, "MONTH"),
+      date: getDate(dateData, "DATE"),
+      day: getDate(dateData, "DAY"),
+      hour: getDate(dateData, "HOUR"),
+      minute: getDate(dateData, "MINUTE"),
+      term: getDate(dateData, "TERM"),
+    };
+  };
 
+  const { year, month, date, day, hour, minute, term } = getDatesFromData(
+    journalData
+  );
+
+  console.log(journalData.id);
   return (
     <>
       {journalData && (
@@ -69,7 +75,7 @@ export default function ContentCard({
                   component='p'
                   className={classes.cardDescription}
                 >
-                  {journalData.journal}
+                  {journalData.data.journal}
                 </Typography>
               </CardActionArea>
 
@@ -77,7 +83,10 @@ export default function ContentCard({
               <Button className={classes.cardButton} onClick={onEdit}>
                 <Edit className={classes.cardEdit} />
               </Button>
-              <Button className={classes.cardButton} onClick={onDelete}>
+              <Button
+                className={classes.cardButton}
+                onClick={() => onDelete(journalData.id)}
+              >
                 <Delete className={classes.cardDelete} />
               </Button>
             </CardMedia>

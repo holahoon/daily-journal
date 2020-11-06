@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { makeStyles, Button } from "@material-ui/core";
@@ -9,7 +9,6 @@ import ContentCard from "components/contentCard/ContentCard";
 import ContentModal from "components/contentModal/ContentModal";
 import firebaseDB from "utils/firebaseInstance";
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
-import { getDate } from "utils/getDate";
 
 function Home() {
   const { userData } = useAuthStateValue()[0];
@@ -26,7 +25,14 @@ function Home() {
         .collection("daily-journals")
         .orderBy("timestamp", "desc")
         .onSnapshot((snapshot) =>
-          setJournalData(snapshot.docs.map((doc) => doc.data()))
+          setJournalData(
+            snapshot.docs.map((doc) => {
+              return {
+                id: doc.id,
+                data: doc.data(),
+              };
+            })
+          )
         );
     }
   }, [userData]);
@@ -39,45 +45,26 @@ function Home() {
     history.push("/write");
   };
 
-  const onDeleteHandler = () => {
-    console.log("deleting");
+  const onDeleteHandler = (id) => {
+    firebaseDB
+      .collection("users")
+      .doc(userData.uid)
+      .collection("daily-journals")
+      .doc(id)
+      .delete();
   };
 
-  // const getCurrentTime = () => {
-  //   const current_year = getDate("YEAR");
-  //   const current_month = getDate("MONTH");
-  //   const current_date = getDate("DATE");
-  //   return `${current_year}-${current_month}-${current_date}`;
-  // };
-
-  const getDatesFromData = (data) => {
-    const dateData = new Date(data.timestamp.seconds * 1000);
-    return {
-      year: getDate(dateData, "YEAR"),
-      month: getDate(dateData, "MONTH"),
-      date: getDate(dateData, "DATE"),
-      day: getDate(dateData, "DAY"),
-      hour: getDate(dateData, "HOUR"),
-      minute: getDate(dateData, "MINUTE"),
-      term: getDate(dateData, "TERM"),
-    };
-  };
-
-  const { year, month, date, day, hour, minute, term } = getDatesFromData(
-    journalData
-  );
-
-  console.log(userData);
+  console.log("home");
   return (
     <div className={classes.home}>
       <CalendarComponent />
       <div className={classes.cardContainer}>
         <div className={classes.writeNew}>
-          <Button variant='outlined'>
-            <Link to='/write'>
+          <Link to='/write'>
+            <Button variant='outlined'>
               <AddCircle /> write new
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         </div>
 
         {journalData.map((data, i) => (
@@ -117,8 +104,10 @@ const useStyles = makeStyles({
     "& a": {
       display: "flex",
       alignItems: "center",
-      color: "#6d6d6d",
       textDecoration: "none",
+    },
+    "& MuiButton-label": {
+      color: "#6d6d6d",
     },
     "& .MuiSvgIcon-root": {
       color: "#98CDC6",
