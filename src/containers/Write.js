@@ -11,7 +11,6 @@ export default function Write() {
   const [messageInputValue, setMessageInputValue] = useState(
     "this is a sample"
   );
-
   const { userData } = useAuthStateValue()[0];
   const history = useHistory();
   const classes = useStyles();
@@ -33,9 +32,8 @@ export default function Write() {
         .add({
           journal: messageInputValue,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          // timestamp: currentTime,
+          timestamp2: currentTime,
         });
-
       // Push the user back to the main page when done
       history.push("/");
     }

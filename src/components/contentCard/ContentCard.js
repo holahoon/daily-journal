@@ -22,25 +22,34 @@ export default function ContentCard({
   onEdit,
   onDelete,
 }) {
-  const current_year = getDate("YEAR");
-  const current_month = getDate("MONTH");
-  const current_date = getDate("DATE");
-  const current_day = getDate("DAY");
-  const current_hour = getDate("HOUR");
-  const current_minute = getDate("MINUTE");
-  const current_term = getDate("TERM");
-
   const classes = useStyles();
 
-  console.log(journalData.timestamp.toDate());
+  console.log(new Date(journalData.timestamp.seconds * 1000).getUTCFullYear());
+
+  const getDatesFromData = (data) => {
+    const dateData = new Date(data.timestamp.seconds * 1000);
+    return {
+      year: getDate(dateData, "YEAR"),
+      month: getDate(dateData, "MONTH"),
+      date: getDate(dateData, "DATE"),
+      day: getDate(dateData, "DAY"),
+      hour: getDate(dateData, "HOUR"),
+      minute: getDate(dateData, "MINUTE"),
+      term: getDate(dateData, "TERM"),
+    };
+  };
+
+  const { year, month, date, day, hour, minute, term } = getDatesFromData(
+    journalData
+  );
 
   return (
     <Card className={classes.cardContainer}>
       <CardContent>
         {/* Card date */}
         <Typography variant='h5' component='h2' className={classes.cardDate}>
-          <span className={classes.date}>{current_date}</span> {current_month}{" "}
-          {current_year}, <span className={classes.day}>{current_day}</span>
+          <span className={classes.date}>{date}</span> {month} {year},{" "}
+          <span className={classes.day}>{day}</span>
         </Typography>
 
         {/* Card content */}

@@ -6,7 +6,9 @@ const HOUR = "HOUR";
 const MINUTE = "MINUTE";
 const TERM = "TERM";
 
-export const getDate = (dateType) => {
+const currentTime = new Date();
+
+export const getDate = (dateToUse = currentTime, dateType) => {
   const monthArray = [
     "January",
     "February",
@@ -32,28 +34,26 @@ export const getDate = (dateType) => {
     "Saturday",
   ];
 
-  const currentTime = new Date();
-
   switch (dateType) {
     case YEAR:
-      return currentTime.getUTCFullYear();
+      return dateToUse.getFullYear();
     case MONTH:
-      return monthArray[currentTime.getUTCMonth()];
+      return monthArray[dateToUse.getMonth()];
     case DATE:
-      return currentTime.getUTCDate();
+      return dateToUse.getDate();
     case DAY:
-      return dayArray[currentTime.getDay()];
+      return dayArray[dateToUse.getDay()];
     case HOUR:
-      let currentHours = currentTime.getHours();
+      let currentHours = dateToUse.getHours();
       currentHours = ("0" + currentHours).slice(-2);
       return currentHours < 12 ? currentHours : currentHours - 12;
     case MINUTE:
-      return currentTime.getMinutes() < 10
-        ? `0${currentTime.getMinutes()}`
-        : `${currentTime.getMinutes()}`;
+      return dateToUse.getMinutes() < 10
+        ? `0${dateToUse.getMinutes()}`
+        : `${dateToUse.getMinutes()}`;
     case TERM:
-      return currentTime.getHours() < 12 ? "AM" : "PM";
+      return dateToUse.getHours() < 12 ? "AM" : "PM";
     default:
-      return currentTime;
+      return dateToUse;
   }
 };
