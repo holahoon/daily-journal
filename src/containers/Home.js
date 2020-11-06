@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
+import { makeStyles, Button } from "@material-ui/core";
+import { AddCircle } from "@material-ui/icons";
 
 import CalendarComponent from "components/calendar/CalendarComponent";
 import ContentCard from "components/contentCard/ContentCard";
@@ -8,35 +10,6 @@ import ContentModal from "components/contentModal/ContentModal";
 import firebaseDB from "utils/firebaseInstance";
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 import { getDate } from "utils/getDate";
-
-const testData = [
-  {
-    date: new Date(),
-    contents: [
-      { editedTime: "edited", description: "blah blah blah" },
-      { editedTime: "editedTime 2", description: "blah blah blah" },
-      {
-        editedTime: "editedTime 3",
-        description:
-          "blah blah blah hahaha this is super fun blah blah blah hahaha this is super fun blah blah blah hahaha this is super fun blah blah blah hahaha this is super fun blah blah blah hahaha this is super fun",
-      },
-    ],
-  },
-  {
-    date: new Date(),
-    contents: [
-      { editedTime: "editedTime 1", description: "blah blah blah" },
-      { editedTime: "editedTime 2", description: "blah blah blah" },
-    ],
-  },
-  {
-    date: new Date(),
-    contents: [
-      { editedTime: "editedTime 1", description: "blah blah blah" },
-      { editedTime: "editedTime 2", description: "blah blah blah" },
-    ],
-  },
-];
 
 function Home() {
   const { userData } = useAuthStateValue()[0];
@@ -47,14 +20,11 @@ function Home() {
 
   useEffect(() => {
     if (userData) {
-      const currentTime = getCurrentTime();
-      // const uid = firebaseDB.collection('users').doc(userData.uid)
       firebaseDB
         .collection("users")
         .doc(userData.uid)
-        // .collection(currentTime)
         .collection("daily-journals")
-        .orderBy("timestamp", "asc")
+        .orderBy("timestamp", "desc")
         .onSnapshot((snapshot) =>
           setJournalData(snapshot.docs.map((doc) => doc.data()))
         );
@@ -73,17 +43,43 @@ function Home() {
     console.log("deleting");
   };
 
-  const getCurrentTime = () => {
-    const current_year = getDate("YEAR");
-    const current_month = getDate("MONTH");
-    const current_date = getDate("DATE");
-    return `${current_year}-${current_month}-${current_date}`;
+  // const getCurrentTime = () => {
+  //   const current_year = getDate("YEAR");
+  //   const current_month = getDate("MONTH");
+  //   const current_date = getDate("DATE");
+  //   return `${current_year}-${current_month}-${current_date}`;
+  // };
+
+  const getDatesFromData = (data) => {
+    const dateData = new Date(data.timestamp.seconds * 1000);
+    return {
+      year: getDate(dateData, "YEAR"),
+      month: getDate(dateData, "MONTH"),
+      date: getDate(dateData, "DATE"),
+      day: getDate(dateData, "DAY"),
+      hour: getDate(dateData, "HOUR"),
+      minute: getDate(dateData, "MINUTE"),
+      term: getDate(dateData, "TERM"),
+    };
   };
 
+  const { year, month, date, day, hour, minute, term } = getDatesFromData(
+    journalData
+  );
+
+  console.log(userData);
   return (
     <div className={classes.home}>
       <CalendarComponent />
       <div className={classes.cardContainer}>
+        <div className={classes.writeNew}>
+          <Button variant='outlined'>
+            <Link to='/write'>
+              <AddCircle /> write new
+            </Link>
+          </Button>
+        </div>
+
         {journalData.map((data, i) => (
           <ContentCard
             key={i}
@@ -115,6 +111,19 @@ const useStyles = makeStyles({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
+  },
+  writeNew: {
+    marginBottom: "20px",
+    "& a": {
+      display: "flex",
+      alignItems: "center",
+      color: "#6d6d6d",
+      textDecoration: "none",
+    },
+    "& .MuiSvgIcon-root": {
+      color: "#98CDC6",
+      marginRight: "10px",
+    },
   },
 });
 

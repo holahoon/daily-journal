@@ -1,7 +1,5 @@
 import {
   Card,
-  List,
-  ListItem,
   Button,
   CardContent,
   CardMedia,
@@ -12,9 +10,6 @@ import {
 import { Edit, Delete } from "@material-ui/icons";
 
 import { getDate } from "utils/getDate";
-import CardDate from "components/contentCard/cardDate/CardDate";
-// import CardListContent from "components/contentCard/cardListContent/CardListContent";
-import CardButton from "components/contentCard/cardButton/CardButton";
 
 export default function ContentCard({
   journalData,
@@ -24,64 +19,72 @@ export default function ContentCard({
 }) {
   const classes = useStyles();
 
-  console.log(new Date(journalData.timestamp.seconds * 1000).getUTCFullYear());
+  // const getDatesFromData = (data) => {
+  //   const dateData = new Date(data.timestamp.seconds * 1000);
+  //   return {
+  //     year: getDate(dateData, "YEAR"),
+  //     month: getDate(dateData, "MONTH"),
+  //     date: getDate(dateData, "DATE"),
+  //     day: getDate(dateData, "DAY"),
+  //     hour: getDate(dateData, "HOUR"),
+  //     minute: getDate(dateData, "MINUTE"),
+  //     term: getDate(dateData, "TERM"),
+  //   };
+  // };
 
-  const getDatesFromData = (data) => {
-    const dateData = new Date(data.timestamp.seconds * 1000);
-    return {
-      year: getDate(dateData, "YEAR"),
-      month: getDate(dateData, "MONTH"),
-      date: getDate(dateData, "DATE"),
-      day: getDate(dateData, "DAY"),
-      hour: getDate(dateData, "HOUR"),
-      minute: getDate(dateData, "MINUTE"),
-      term: getDate(dateData, "TERM"),
-    };
-  };
-
-  const { year, month, date, day, hour, minute, term } = getDatesFromData(
-    journalData
-  );
+  // const { year, month, date, day, hour, minute, term } = getDatesFromData(
+  //   journalData
+  // );
 
   return (
-    <Card className={classes.cardContainer}>
-      <CardContent>
-        {/* Card date */}
-        <Typography variant='h5' component='h2' className={classes.cardDate}>
-          <span className={classes.date}>{date}</span> {month} {year},{" "}
-          <span className={classes.day}>{day}</span>
-        </Typography>
-
-        {/* Card content */}
-        <CardMedia className={classes.cardContent}>
-          <CardActionArea
-            className={classes.cardContentButton}
-            onClick={onToggleModal}
-          >
+    <>
+      {journalData && (
+        <Card className={classes.cardContainer}>
+          <CardContent>
+            {/* Card date */}
             <Typography
-              variant='h6'
-              component='h3'
-              className={classes.cardTime}
+              variant='h5'
+              component='h2'
+              className={classes.cardDate}
             >
-              {journalData.journal}
+              <span className={classes.date}>{date}</span> {month} {year},{" "}
+              <span className={classes.day}>{day}</span>
             </Typography>
-            <Typography
-              variant='body1'
-              component='p'
-              className={classes.cardDescription}
-            ></Typography>
-          </CardActionArea>
 
-          {/* Buttons */}
-          <Button className={classes.cardButton} onClick={onEdit}>
-            <Edit className={classes.cardEdit} />
-          </Button>
-          <Button className={classes.cardButton} onClick={onDelete}>
-            <Delete className={classes.cardDelete} />
-          </Button>
-        </CardMedia>
-      </CardContent>
-    </Card>
+            {/* Card content */}
+            <CardMedia className={classes.cardContent}>
+              <CardActionArea
+                className={classes.cardContentButton}
+                onClick={onToggleModal}
+              >
+                <Typography
+                  variant='h6'
+                  component='h5'
+                  className={classes.cardTime}
+                >
+                  {hour}:{minute} {term}
+                </Typography>
+                <Typography
+                  variant='body1'
+                  component='p'
+                  className={classes.cardDescription}
+                >
+                  {journalData.journal}
+                </Typography>
+              </CardActionArea>
+
+              {/* Buttons */}
+              <Button className={classes.cardButton} onClick={onEdit}>
+                <Edit className={classes.cardEdit} />
+              </Button>
+              <Button className={classes.cardButton} onClick={onDelete}>
+                <Delete className={classes.cardDelete} />
+              </Button>
+            </CardMedia>
+          </CardContent>
+        </Card>
+      )}
+    </>
   );
 }
 
@@ -113,16 +116,17 @@ const useStyles = makeStyles({
     padding: "0 5px",
     fontSize: "1.3rem",
     fontWeight: "bold",
-    color: "#3d3d3d",
+    color: "#4f4f4f",
   },
   cardTime: {
-    fontSize: "0.95rem",
-    fontWeight: "bold",
+    fontSize: "0.8rem",
     color: "#CFB491",
   },
   cardDescription: {
+    marginTop: "3px",
     fontSize: "1rem",
-    color: "#555555",
+    fontWeight: "bold",
+    color: "#CFB491",
   },
   cardButton: {
     minWidth: "20px",

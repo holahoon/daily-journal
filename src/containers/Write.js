@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 import firebaseDB from "utils/firebaseInstance";
-import { getDate } from "utils/getDate";
+// import { getDate } from "utils/getDate";
 
 export default function Write() {
   const [messageInputValue, setMessageInputValue] = useState(
@@ -19,41 +19,35 @@ export default function Write() {
     setMessageInputValue(e.target.value);
   };
 
-  const onSaveHandler = async () => {
-    if (userData) {
-      // const currentTime = getCurrentTime();
-      const currentTime = new Date();
-      // Create a database collection as the following = [users] -> [userId] -> [year-month-date] -> {data object}
-      await firebaseDB
-        .collection("users")
-        .doc(userData.uid)
-        // .collection(currentTime)
-        .collection("daily-journals")
-        .add({
-          journal: messageInputValue,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          timestamp2: currentTime,
-        });
-      // Push the user back to the main page when done
-      history.push("/");
-    }
-  };
-
   const onCancelHandler = () => {
     console.log("cancel");
   };
 
-  const getCurrentTime = () => {
-    const current_year = getDate("YEAR");
-    const current_month = getDate("MONTH");
-    const current_date = getDate("DATE");
-    return `${current_year}-${current_month}-${current_date}`;
+  const onSubmitHandler = () => {
+    onSave();
+
+    // // Push the user back to the main page when done
+    history.push("/");
+  };
+
+  const onSave = () => {
+    if (userData) {
+      // Create a database collection as the following = [users] -> [userId] -> [daily-journals] -> {data object}
+      firebaseDB
+        .collection("users")
+        .doc(userData.uid)
+        .collection("daily-journals")
+        .add({
+          journal: messageInputValue,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+    }
   };
 
   return (
     <div>
       <div>
-        <button onClick={onSaveHandler}>save</button>
+        <button onClick={onSubmitHandler}>save</button>
         <button onClick={onCancelHandler}>cancel</button>
       </div>
 

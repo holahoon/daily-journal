@@ -44,9 +44,9 @@ export const getDate = (dateToUse = currentTime, dateType) => {
     case DAY:
       return dayArray[dateToUse.getDay()];
     case HOUR:
-      let currentHours = dateToUse.getHours();
-      currentHours = ("0" + currentHours).slice(-2);
-      return currentHours < 12 ? currentHours : currentHours - 12;
+      return dateToUse.getHours() < 12
+        ? dateToUse.getHours()
+        : dateToUse.getHours() - 12;
     case MINUTE:
       return dateToUse.getMinutes() < 10
         ? `0${dateToUse.getMinutes()}`

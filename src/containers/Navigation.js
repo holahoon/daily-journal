@@ -7,7 +7,6 @@ function Navigation() {
     <header>
       <nav>
         <Link to='/'>MyBook</Link>
-        <Link to='/write'>write</Link>
         <Authentication />
       </nav>
     </header>
