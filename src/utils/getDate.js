@@ -36,17 +36,17 @@ export const getDate = (dateToUse = currentTime, dateType) => {
 
   switch (dateType) {
     case YEAR:
-      return dateToUse.getFullYear();
+      return `${dateToUse.getFullYear()}`;
     case MONTH:
-      return monthArray[dateToUse.getMonth()];
+      return `${monthArray[dateToUse.getMonth()]}`;
     case DATE:
-      return dateToUse.getDate();
+      return `${dateToUse.getDate()}`;
     case DAY:
-      return dayArray[dateToUse.getDay()];
+      return `${dayArray[dateToUse.getDay()]}`;
     case HOUR:
       return dateToUse.getHours() < 12
-        ? dateToUse.getHours()
-        : dateToUse.getHours() - 12;
+        ? `${dateToUse.getHours()}`
+        : `${dateToUse.getHours() - 12}`;
     case MINUTE:
       return dateToUse.getMinutes() < 10
         ? `0${dateToUse.getMinutes()}`

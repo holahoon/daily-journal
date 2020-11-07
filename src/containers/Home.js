@@ -1,6 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { useHistory } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { makeStyles, Button } from "@material-ui/core";
 import { AddCircle } from "@material-ui/icons";
 
@@ -37,24 +36,25 @@ function Home() {
     }
   }, [userData]);
 
-  const onToggleModalHandler = () => {
+  const onToggleModalHandler = (docId) => {
     setIsModalOpen((prev) => !prev);
+    // TODO:
+    // Show the modal with the given doc id
   };
 
-  const onEditHandler = () => {
-    history.push("/write");
+  const onEditHandler = (docId) => {
+    history.push(`/write/${docId}`);
   };
 
-  const onDeleteHandler = (id) => {
+  const onDeleteHandler = (docId) => {
     firebaseDB
       .collection("users")
       .doc(userData.uid)
       .collection("daily-journals")
-      .doc(id)
+      .doc(docId)
       .delete();
   };
 
-  console.log("home");
   return (
     <div className={classes.home}>
       <CalendarComponent />

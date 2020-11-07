@@ -41,7 +41,6 @@ export default function ContentCard({
     journalData
   );
 
-  console.log(journalData.id);
   return (
     <>
       {journalData && (
@@ -61,7 +60,7 @@ export default function ContentCard({
             <CardMedia className={classes.cardContent}>
               <CardActionArea
                 className={classes.cardContentButton}
-                onClick={onToggleModal}
+                onClick={() => onToggleModal(journalData.id)}
               >
                 <Typography
                   variant='h6'
@@ -80,7 +79,10 @@ export default function ContentCard({
               </CardActionArea>
 
               {/* Buttons */}
-              <Button className={classes.cardButton} onClick={onEdit}>
+              <Button
+                className={classes.cardButton}
+                onClick={() => onEdit(journalData.id)}
+              >
                 <Edit className={classes.cardEdit} />
               </Button>
               <Button

@@ -17,7 +17,10 @@ function AppRouter() {
           <Route path='/' exact>
             <Home />
           </Route>
-          <Route path='/write'>
+          <Route path='/write/:docId' exact>
+            <Write />
+          </Route>
+          <Route path='/write' exact>
             <Write />
           </Route>
           <Route path='/auth'>

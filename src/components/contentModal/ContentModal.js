@@ -1,9 +1,13 @@
 import { makeStyles, Modal, Fade, Backdrop } from "@material-ui/core";
 
-export default function ContentModal({ isModalOpen, onToggleModal }) {
+export default function ContentModal({
+  journalData,
+  isModalOpen,
+  onToggleModal,
+}) {
   const classes = useStyles();
 
-  // console.log(testData);
+  console.log(journalData);
   return (
     <Modal
       aria-labelledby='transition-modal-title'
