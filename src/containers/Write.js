@@ -34,7 +34,10 @@ export default function Write() {
           journal: messageInputValue,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         })
-        .then(() => history.push("/"));
+        .then(() => {
+          console.log("completed");
+          // history.push("/")
+        });
     }
   };
 
