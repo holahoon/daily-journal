@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useHistory, withRouter } from "react-router-dom";
+import { useHistory, Redirect, withRouter } from "react-router-dom";
 import firebase from "firebase";
 import { makeStyles } from "@material-ui/core";
 
@@ -8,60 +8,56 @@ import firebaseDB from "utils/firebaseInstance";
 
 export default withRouter(function Write({ match }) {
   const [messageInputValue, setMessageInputValue] = useState("");
+  const [isDataSet, setIsDataSet] = useState(false);
   const { userData } = useAuthStateValue()[0];
   const history = useHistory();
   const classes = useStyles();
 
   useEffect(() => {
     if (match.params.docId && userData) {
-      GetJournal(userData.uid, match.params.docId);
+      getJournal(userData.uid, match.params.docId);
     }
+    return () => getJournal;
   }, [userData, match]);
 
-  const onChangeHandler = (e) => {
-    setMessageInputValue(e.target.value);
+  useEffect(() => {
+    return () => {
+      setIsDataSet(false);
+      setMessageInputValue("");
+    };
+  }, []);
+
+  const editJournal = () => {
+    firebaseDB
+      .collection("users")
+      .doc(userData.uid)
+      .collection("daily-journals")
+      .doc(match.params.docId)
+      .update({
+        journal: messageInputValue,
+      })
+      .then(() => {
+        setIsDataSet(true);
+      })
+      .catch((err) => console.log(err));
   };
 
-  const onCancelHandler = () => {
-    history.push("/");
+  const writeNewJournal = () => {
+    firebaseDB
+      .collection("users")
+      .doc(userData.uid)
+      .collection("daily-journals")
+      .add({
+        journal: messageInputValue,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+      })
+      .then(() => {
+        setIsDataSet(true);
+      })
+      .catch((err) => console.log(err));
   };
 
-  const onSaveHandler = () => {
-    // Create a database collection as the following = [users] -> [userId] -> [daily-journals] -> {data object}
-    if (userData) {
-      if (match.params.docId) {
-        // Edit
-        firebaseDB
-          .collection("users")
-          .doc(userData.uid)
-          .collection("daily-journals")
-          .doc(match.params.docId)
-          .update({
-            journal: messageInputValue,
-          })
-          .then(() => {
-            history.push("/");
-          })
-          .catch((err) => console.log(err));
-      } else {
-        // Write new
-        firebaseDB
-          .collection("users")
-          .doc(userData.uid)
-          .collection("daily-journals")
-          .add({
-            journal: messageInputValue,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          })
-          .then(() => {
-            history.push("/");
-          })
-          .catch((err) => console.log(err));
-      }
-    }
-  };
-
-  const GetJournal = (uid, docId) => {
+  const getJournal = (uid, docId) => {
     firebaseDB
       .collection("users")
       .doc(uid)
@@ -78,25 +74,52 @@ export default withRouter(function Write({ match }) {
       });
   };
 
-  return (
-    <div>
-      <div>
-        <button onClick={onSaveHandler}>save</button>
-        <button onClick={onCancelHandler}>cancel</button>
-      </div>
+  const onChangeHandler = (e) => {
+    setMessageInputValue(e.target.value);
+  };
 
-      <form className={classes.form}>
-        <textarea
-          autoFocus
-          className={classes.textArea}
-          rows='1'
-          placeholder='Write your thoughts here...'
-          name='messageText'
-          value={messageInputValue}
-          onChange={onChangeHandler}
-        />
-      </form>
-    </div>
+  const onCancelHandler = () => {
+    history.push("/");
+  };
+
+  const onSaveHandler = () => {
+    // [users] -> [userId] -> [daily-journals] -> [docId] -> {data object}
+    if (userData && messageInputValue) {
+      if (match.params.docId) {
+        // Edit
+        editJournal();
+      } else {
+        // Write new
+        writeNewJournal();
+      }
+    }
+  };
+
+  return (
+    <>
+      {isDataSet ? (
+        <Redirect to='/' />
+      ) : (
+        <div>
+          <div>
+            <button onClick={onSaveHandler}>save</button>
+            <button onClick={onCancelHandler}>cancel</button>
+          </div>
+
+          <form className={classes.form}>
+            <textarea
+              autoFocus
+              className={classes.textArea}
+              rows='1'
+              placeholder='Write your thoughts here...'
+              name='messageText'
+              value={messageInputValue}
+              onChange={onChangeHandler}
+            />
+          </form>
+        </div>
+      )}
+    </>
   );
 });
 

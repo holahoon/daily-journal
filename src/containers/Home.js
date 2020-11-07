@@ -38,8 +38,22 @@ function Home() {
 
   const onToggleModalHandler = (docId) => {
     setIsModalOpen((prev) => !prev);
-    // TODO:
-    // Show the modal with the given doc id
+    if (!isModalOpen) {
+      console.log(docId);
+      firebaseDB
+        .collection("users")
+        .doc(userData.uid)
+        .collection("daily-journals")
+        .doc(docId)
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            console.log("data: ", doc.data());
+          } else {
+            console.log("No such document!");
+          }
+        });
+    }
   };
 
   const onEditHandler = (docId) => {
