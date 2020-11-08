@@ -58,8 +58,9 @@ const getDateFromData = (dateToUse = currentTime, dateType) => {
   }
 };
 
-export const getDate = (data) => {
-  const dateData = new Date(data.data.timestamp?.seconds * 1000);
+export const getDate = (timestamp) => {
+  // const dateData = new Date(data.data.timestamp?.seconds * 1000);
+  const dateData = new Date(timestamp?.seconds * 1000);
   return {
     year: getDateFromData(dateData, "YEAR"),
     month: getDateFromData(dateData, "MONTH"),

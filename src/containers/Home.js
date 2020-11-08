@@ -151,6 +151,29 @@ const useStyles = makeStyles({
     flexBasis: "100%",
     padding: "0 20px",
   },
+  date: {
+    color: "#98CDC6",
+    marginRight: "5px",
+  },
+  day: {
+    color: "#CFB491",
+  },
+  cardDate: {
+    padding: "0 5px",
+    fontSize: "1.3rem",
+    fontWeight: "bold",
+    color: "#4f4f4f",
+  },
+  // cardTime: {
+  //   fontSize: "0.8rem",
+  //   color: "#CFB491",
+  // },
+  // cardDescription: {
+  //   marginTop: "3px",
+  //   fontSize: "1rem",
+  //   fontWeight: "bold",
+  //   color: "#CFB491",
+  // },
 });
 
 export default Home;

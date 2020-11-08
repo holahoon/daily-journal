@@ -25,7 +25,9 @@ export default function ContentCard({
   //   journalData && getDate(journalData);
   // }, [journalData]);
 
-  const { year, month, date, day, hour, minute, term } = getDate(journalData);
+  const { year, month, date, day, hour, minute, term } = getDate(
+    journalData.data.timestamp
+  );
 
   return (
     <>
@@ -90,9 +92,6 @@ const useStyles = makeStyles({
     // width: "40vw",
     width: "100%",
     marginBottom: "10px",
-  },
-  list: {
-    paddingLeft: "0",
   },
   date: {
     color: "#98CDC6",
