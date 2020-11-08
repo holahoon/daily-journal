@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import {
   Card,
   Button,
@@ -14,32 +14,18 @@ import { getDate } from "utils/getDate";
 
 export default function ContentCard({
   journalData,
-  onToggleModal,
+  dataIndex,
+  getJournal,
   onEdit,
   onDelete,
 }) {
   const classes = useStyles();
 
-  useEffect(() => {
-    journalData && getDatesFromData(journalData);
-  }, [journalData]);
+  // useEffect(() => {
+  //   journalData && getDate(journalData);
+  // }, [journalData]);
 
-  const getDatesFromData = (data) => {
-    const dateData = new Date(data.data.timestamp?.seconds * 1000);
-    return {
-      year: getDate(dateData, "YEAR"),
-      month: getDate(dateData, "MONTH"),
-      date: getDate(dateData, "DATE"),
-      day: getDate(dateData, "DAY"),
-      hour: getDate(dateData, "HOUR"),
-      minute: getDate(dateData, "MINUTE"),
-      term: getDate(dateData, "TERM"),
-    };
-  };
-
-  const { year, month, date, day, hour, minute, term } = getDatesFromData(
-    journalData
-  );
+  const { year, month, date, day, hour, minute, term } = getDate(journalData);
 
   return (
     <>
@@ -60,7 +46,7 @@ export default function ContentCard({
             <CardMedia className={classes.cardContent}>
               <CardActionArea
                 className={classes.cardContentButton}
-                onClick={() => onToggleModal(journalData.id)}
+                onClick={() => getJournal(dataIndex)}
               >
                 <Typography
                   variant='h6'
@@ -101,7 +87,8 @@ export default function ContentCard({
 
 const useStyles = makeStyles({
   cardContainer: {
-    width: "40vw",
+    // width: "40vw",
+    width: "100%",
     marginBottom: "10px",
   },
   list: {

@@ -8,7 +8,7 @@ const TERM = "TERM";
 
 const currentTime = new Date();
 
-export const getDate = (dateToUse = currentTime, dateType) => {
+const getDateFromData = (dateToUse = currentTime, dateType) => {
   const monthArray = [
     "January",
     "February",
@@ -56,4 +56,17 @@ export const getDate = (dateToUse = currentTime, dateType) => {
     default:
       return dateToUse;
   }
+};
+
+export const getDate = (data) => {
+  const dateData = new Date(data.data.timestamp?.seconds * 1000);
+  return {
+    year: getDateFromData(dateData, "YEAR"),
+    month: getDateFromData(dateData, "MONTH"),
+    date: getDateFromData(dateData, "DATE"),
+    day: getDateFromData(dateData, "DAY"),
+    hour: getDateFromData(dateData, "HOUR"),
+    minute: getDateFromData(dateData, "MINUTE"),
+    term: getDateFromData(dateData, "TERM"),
+  };
 };

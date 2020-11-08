@@ -3,15 +3,17 @@ import { Link, useHistory } from "react-router-dom";
 import { makeStyles, Button } from "@material-ui/core";
 import { AddCircle } from "@material-ui/icons";
 
-import CalendarComponent from "components/calendar/CalendarComponent";
+// import CalendarComponent from "components/calendar/CalendarComponent";
+import JournalDisplay from "components/journalDisplay/JournalDisplay";
 import ContentCard from "components/contentCard/ContentCard";
-import ContentModal from "components/contentModal/ContentModal";
+// import ContentModal from "components/contentModal/ContentModal";
 import firebaseDB from "utils/firebaseInstance";
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 
 function Home() {
   const { userData } = useAuthStateValue()[0];
   const [journalData, setJournalData] = useState([]);
+  const [selectedJournalIndex, setSelectedJournalIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const history = useHistory();
   const classes = useStyles();
@@ -36,25 +38,30 @@ function Home() {
     }
   }, [userData]);
 
-  const onToggleModalHandler = (docId) => {
-    setIsModalOpen((prev) => !prev);
-    if (!isModalOpen) {
-      console.log(docId);
-      firebaseDB
-        .collection("users")
-        .doc(userData.uid)
-        .collection("daily-journals")
-        .doc(docId)
-        .get()
-        .then((doc) => {
-          if (doc.exists) {
-            console.log("data: ", doc.data());
-          } else {
-            console.log("No such document!");
-          }
-        });
-    }
+  const getJournal = (dataIndex) => {
+    // const journalDataArray = [...journalData];
+    setSelectedJournalIndex(dataIndex);
   };
+
+  // const onToggleModalHandler = (docId) => {
+  //   setIsModalOpen((prev) => !prev);
+  //   if (!isModalOpen) {
+  //     console.log(docId);
+  //     firebaseDB
+  //       .collection("users")
+  //       .doc(userData.uid)
+  //       .collection("daily-journals")
+  //       .doc(docId)
+  //       .get()
+  //       .then((doc) => {
+  //         if (doc.exists) {
+  //           console.log("data: ", doc.data());
+  //         } else {
+  //           console.log("No such document!");
+  //         }
+  //       });
+  //   }
+  // };
 
   const onEditHandler = (docId) => {
     history.push(`/write/${docId}`);
@@ -71,7 +78,8 @@ function Home() {
 
   return (
     <div className={classes.home}>
-      <CalendarComponent />
+      {/* <CalendarComponent /> */}
+      {/* Left side */}
       <div className={classes.cardContainer}>
         <div className={classes.writeNew}>
           <Link to='/write'>
@@ -84,19 +92,27 @@ function Home() {
         {journalData.map((data, i) => (
           <ContentCard
             key={i}
+            dataIndex={i}
             journalData={data}
-            onToggleModal={onToggleModalHandler}
+            getJournal={getJournal}
             onEdit={onEditHandler}
             onDelete={onDeleteHandler}
           />
         ))}
       </div>
 
-      <ContentModal
+      {/* Right side */}
+      <JournalDisplay
+        classes={classes}
+        journalData={journalData}
+        selectedJournalIndex={selectedJournalIndex}
+      />
+
+      {/* <ContentModal
         journalData={journalData}
         isModalOpen={isModalOpen}
         onToggleModal={onToggleModalHandler}
-      />
+      /> */}
     </div>
   );
 }
@@ -111,7 +127,9 @@ const useStyles = makeStyles({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    width: "100%",
+    flexGrow: "1",
+    flexBasis: "100%",
+    padding: "0 20px",
   },
   writeNew: {
     marginBottom: "20px",
@@ -127,6 +145,11 @@ const useStyles = makeStyles({
       color: "#98CDC6",
       marginRight: "10px",
     },
+  },
+  journal: {
+    flexGrow: "1",
+    flexBasis: "100%",
+    padding: "0 20px",
   },
 });
 
