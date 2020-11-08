@@ -146,11 +146,12 @@ const useStyles = makeStyles({
       marginRight: "10px",
     },
   },
-  journal: {
+  journalPage: {
     flexGrow: "1",
     flexBasis: "100%",
     padding: "0 20px",
   },
+  journalContent: {},
   date: {
     color: "#98CDC6",
     marginRight: "5px",

@@ -12,18 +12,16 @@ export default function JournalDisplay({
   const timestamp = journalData[selectedJournalIndex]?.data.timestamp;
   const { year, month, date, day, hour, minute, term } = getDate(timestamp);
   return (
-    <>
-      {journalData ? (
-        <div className={classes.journal}>
+    <div className={classes.journalPage}>
+      {journalData && (
+        <div className={classes.journalContainer}>
           <Typography variant='h5' component='h2' className={classes.cardDate}>
             <span className={classes.date}>{date}</span> {month} {year},{" "}
             <span className={classes.day}>{day}</span>
           </Typography>
           <p>{journalContent}</p>
         </div>
-      ) : (
-        <span>Loading...</span>
       )}
-    </>
+    </div>
   );
 }

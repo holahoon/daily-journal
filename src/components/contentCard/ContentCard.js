@@ -21,10 +21,6 @@ export default function ContentCard({
 }) {
   const classes = useStyles();
 
-  // useEffect(() => {
-  //   journalData && getDate(journalData);
-  // }, [journalData]);
-
   const { year, month, date, day, hour, minute, term } = getDate(
     journalData.data.timestamp
   );
