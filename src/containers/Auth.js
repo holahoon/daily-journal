@@ -1,11 +1,20 @@
 import { useState } from "react";
 import { Redirect } from "react-router-dom";
+import {
+  Paper,
+  Grid,
+  TextField,
+  Button,
+  FormControlLabel,
+  Checkbox,
+} from "@material-ui/core";
+import { Face, Fingerprint } from "@material-ui/icons";
 
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 import useAuthState from "hooks/useState/useAuthState";
 import { authService } from "utils/firebaseInstance";
 
-function Auth() {
+function Auth(props) {
   const { userData } = useAuthStateValue()[0];
   const [form, onChangeHandler] = useAuthState({
     userName: "",
@@ -49,13 +58,15 @@ function Auth() {
     setIsNewAccount((prev) => !prev);
   };
 
+  const { classes } = props;
+
   return (
     <>
       {userData ? (
         // Redirect the user to the main page if the user is already || has logged in || just signed up
         <Redirect to='/' />
       ) : (
-        <>
+        <Paper>
           <form onSubmit={onSubmitHandler}>
             {isNewAccount && (
               <input
@@ -92,7 +103,7 @@ function Auth() {
               {!isNewAccount ? "Sign Up" : "Log In"}
             </button>
           </div>
-        </>
+        </Paper>
       )}
     </>
   );
