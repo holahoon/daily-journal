@@ -1,8 +1,9 @@
-import { SET_USER, LOG_IN, LOG_OUT } from "hooks/actionType/actionType";
+import { SET_USER, SET_USER_FAIL, LOG_OUT } from "hooks/actionType/actionType";
 
 // - Initial user state (expect to receive an object when the user is authenticated)
 export const initialState = {
   userData: null,
+  userDataError: false,
 };
 
 const useAuthReducer = (state = initialState, action) => {
@@ -10,18 +11,16 @@ const useAuthReducer = (state = initialState, action) => {
     case SET_USER:
       return {
         ...state,
-        userData: action.userData,
+        userData: {
+          displayName: action.userData.displayName,
+          uid: action.userData.uid,
+        },
+        userDataError: false,
       };
-    case LOG_IN:
-      return {
-        ...state,
-        userData: action.userData,
-      };
+    case SET_USER_FAIL:
+      return { ...state, userData: null, userDataError: true };
     case LOG_OUT:
-      return {
-        ...state,
-        userData: null,
-      };
+      return { ...state, userData: null, userDataError: false };
     default:
       return state;
   }
