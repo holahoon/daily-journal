@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useHistory, Redirect, withRouter } from "react-router-dom";
 import firebase from "firebase";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Button, Typography } from "@material-ui/core";
 
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 import firebaseDB from "utils/firebaseInstance";
@@ -96,15 +96,10 @@ export default withRouter(function Write({ match }) {
 
   return (
     <>
-      {isDataSet ? (
+      {isDataSet || !userData ? (
         <Redirect to='/' />
       ) : (
-        <div>
-          <div>
-            <button onClick={onSaveHandler}>save</button>
-            <button onClick={onCancelHandler}>cancel</button>
-          </div>
-
+        <div className={classes.write}>
           <form className={classes.form}>
             <textarea
               autoFocus
@@ -116,6 +111,23 @@ export default withRouter(function Write({ match }) {
               onChange={onChangeHandler}
             />
           </form>
+
+          <div className={classes.buttonContainer}>
+            <Button
+              variant='outlined'
+              className={classes.saveButton}
+              onClick={onSaveHandler}
+            >
+              save
+            </Button>
+            <Button
+              variant='outlined'
+              className={classes.cancelButton}
+              onClick={onCancelHandler}
+            >
+              cancel
+            </Button>
+          </div>
         </div>
       )}
     </>
@@ -123,12 +135,41 @@ export default withRouter(function Write({ match }) {
 });
 
 const useStyles = makeStyles({
+  write: {
+    marginTop: "80px",
+  },
   form: {
-    marginTop: "50px",
+    display: "flex",
+    justifyContent: "center",
+    marginBottom: "30px",
   },
   textArea: {
     width: "100%",
-    height: "700px",
+    maxWidth: "900px",
+    height: "550px",
     border: "none",
+    color: "#3d3d3d",
+  },
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "center",
+  },
+  saveButton: {
+    marginRight: "10px",
+    fontSize: "0.85rem",
+    fontWeight: "600",
+    color: "#98CDC6",
+    "&:hover": {
+      border: "1px solid #98CDC6",
+    },
+  },
+  cancelButton: {
+    marginLeft: "10px",
+    fontSize: "0.85rem",
+    fontWeight: "600",
+    color: "#EF6663",
+    "&:hover": {
+      border: "1px solid #EF6663",
+    },
   },
 });

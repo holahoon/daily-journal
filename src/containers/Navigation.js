@@ -48,13 +48,16 @@ const useStyles = makeStyles({
     textDecoration: "none",
     "& button": {
       fontSize: "1rem",
+      fontWeight: "500",
       color: "#ffffff",
       border: "1px solid #ffffff",
     },
   },
   logOut: {
-    color: "#EF6663",
-    fontSize: "0.8rem",
+    backgroundColor: "#EF6663",
+    color: "#ffffff",
+    fontSize: "0.7rem",
+    fontWeight: "500",
     border: "1px solid #EF6663",
   },
 });
