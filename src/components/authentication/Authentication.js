@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
+import { Typography, Button } from "@material-ui/core";
 
 import { authService } from "utils/firebaseInstance";
 import { LOG_OUT } from "hooks/actionType/actionType";
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 
-function Authentication() {
+export default function Authentication({ classes }) {
   const [{ userData }, dispatch] = useAuthStateValue();
 
   const onLogOutHandler = () => {
@@ -17,17 +18,23 @@ function Authentication() {
   };
 
   const userName = userData ? (
-    <span>{userData.displayName}</span>
+    <Typography variant='h6' className={classes.userName}>
+      {userData.displayName}
+    </Typography>
   ) : (
-    <Link to='/auth'>log in</Link>
+    <Link to='/auth' className={classes.logIn}>
+      <Button>log in</Button>
+    </Link>
   );
 
   return (
-    <div>
+    <div className={classes.container}>
       {userName}
-      {userData && <button onClick={onLogOutHandler}>log out</button>}
+      {userData && (
+        <Button className={classes.logOut} onClick={onLogOutHandler}>
+          log out
+        </Button>
+      )}
     </div>
   );
 }
-
-export default Authentication;

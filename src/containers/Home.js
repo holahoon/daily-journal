@@ -143,6 +143,7 @@ const useStyles = makeStyles({
     fontSize: "1.05rem",
     fontWeight: "500",
     color: "#555555",
+    whiteSpace: "pre-wrap",
   },
   date: {
     color: "#98CDC6",

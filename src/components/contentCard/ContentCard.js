@@ -20,6 +20,15 @@ export default function ContentCard({
 }) {
   const classes = useStyles();
 
+  const breakSentence = (sentence, count) => {
+    if (sentence.length) {
+      const sentenceArray = sentence.split(" ");
+      return sentenceArray.length >= count
+        ? sentenceArray.slice(0, count).join(" ").concat("...")
+        : sentenceArray.join(" ");
+    }
+  };
+
   const { year, month, date, day, hour, minute, term } = getDate(
     journalData.data.timestamp
   );
@@ -57,7 +66,7 @@ export default function ContentCard({
                   component='p'
                   className={classes.cardDescription}
                 >
-                  {journalData.data.journal}
+                  {breakSentence(journalData.data.journal, 20)}
                 </Typography>
               </CardActionArea>
 

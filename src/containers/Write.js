@@ -66,7 +66,6 @@ export default withRouter(function Write({ match }) {
       .get()
       .then((doc) => {
         if (doc.exists) {
-          console.log(doc.data());
           setMessageInputValue(doc.data().journal);
         } else {
           console.log("No such document!");
