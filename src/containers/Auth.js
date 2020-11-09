@@ -7,26 +7,15 @@ import {
   TextField,
   Button,
   Typography,
-  FormControlLabel,
   FormControl,
-  OutlinedInput,
-  InputLabel,
-  InputAdornment,
-  IconButton,
 } from "@material-ui/core";
-import {
-  Face,
-  Fingerprint,
-  PersonAdd,
-  Visibility,
-  VisibilityOff,
-} from "@material-ui/icons";
+import { Face, Fingerprint, PersonAdd } from "@material-ui/icons";
 
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 import useAuthState from "hooks/useState/useAuthState";
 import { authService } from "utils/firebaseInstance";
 
-function Auth() {
+export default function Auth() {
   const { userData } = useAuthStateValue()[0];
   const [form, onChangeHandler] = useAuthState({
     userName: "",
@@ -51,8 +40,8 @@ function Auth() {
     }
   };
 
-  const signUpHandler = (email, password, userName) => {
-    authService
+  const signUpHandler = async (email, password, userName) => {
+    await authService
       .createUserWithEmailAndPassword(email, password)
       .then((authUser) => {
         // Update displayName when signing up
@@ -61,8 +50,8 @@ function Auth() {
       .catch((error) => setAuthError(error.message));
   };
 
-  const logInHander = (email, password) => {
-    authService
+  const logInHander = async (email, password) => {
+    await authService
       .signInWithEmailAndPassword(email, password)
       .then()
       .catch((error) => setAuthError(error.message));
@@ -78,7 +67,7 @@ function Auth() {
         // Redirect the user to the main page if the user is already || has logged in || just signed up
         <Redirect to='/' />
       ) : (
-        <Paper className={classes.paper}>
+        <Paper elevation={2} className={classes.paper}>
           <FormControl autoComplete='off' fullWidth className={classes.form}>
             {isNewAccount && (
               <Box
@@ -88,7 +77,6 @@ function Auth() {
               >
                 <PersonAdd />
                 <TextField
-                  id='outlined-basic'
                   label='User Name'
                   variant='outlined'
                   type='text'
@@ -105,7 +93,6 @@ function Auth() {
             >
               <Face />
               <TextField
-                id='outlined-basic'
                 label='Email'
                 variant='outlined'
                 type='text'
@@ -121,7 +108,6 @@ function Auth() {
             >
               <Fingerprint />
               <TextField
-                id='outlined-basic'
                 label='Password'
                 variant='outlined'
                 type='password'
@@ -138,9 +124,11 @@ function Auth() {
               {isNewAccount ? "sign up" : "login"}
             </Button>
           </FormControl>
-          <span>{authError}</span>
+          <Typography variant='body1' className={classes.errorMessage}>
+            {authError}
+          </Typography>
 
-          <Box display='flex' alignItems='center'>
+          <Box display='flex' alignItems='center' className={classes.toggleBox}>
             <Typography variant='h6' className={classes.toggleMessage}>
               {!isNewAccount ? "First time here?" : "Have we met before?"}
             </Typography>
@@ -158,22 +146,20 @@ function Auth() {
   );
 }
 
-export default Auth;
-
 const useStyles = makeStyles({
   paper: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     marginTop: "60px",
-    padding: "40px 0",
+    padding: "60px 0 90px",
   },
   form: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     maxWidth: "600px",
-    margin: "40px auto 60px",
+    margin: "40px auto 15px",
     "& svg": {
       color: "#98CDC6",
     },
@@ -185,6 +171,21 @@ const useStyles = makeStyles({
       width: "100%",
       marginLeft: "10px",
     },
+    "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#CFB491",
+    },
+    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#CFB491",
+    },
+    "& .MuiInputLabel-outlined": {
+      color: "#98CDC6",
+    },
+    "& .MuiInputLabel-outlined.Mui-focused": {
+      color: "#CFB491",
+    },
+    "& .MuiOutlinedInput-input": {
+      color: "#5d5d5d",
+    },
   },
   emailBox: {
     width: "100%",
@@ -192,6 +193,21 @@ const useStyles = makeStyles({
     "& .MuiTextField-root": {
       width: "100%",
       marginLeft: "10px",
+    },
+    "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#CFB491",
+    },
+    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#CFB491",
+    },
+    "& .MuiInputLabel-outlined": {
+      color: "#98CDC6",
+    },
+    "& .MuiInputLabel-outlined.Mui-focused": {
+      color: "#CFB491",
+    },
+    "& .MuiOutlinedInput-input": {
+      color: "#5d5d5d",
     },
   },
   passwordBox: {
@@ -201,6 +217,25 @@ const useStyles = makeStyles({
       width: "100%",
       marginLeft: "10px",
     },
+    "&:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#CFB491",
+    },
+    "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      borderColor: "#CFB491",
+    },
+    "& .MuiInputLabel-outlined": {
+      color: "#98CDC6",
+    },
+    "& .MuiInputLabel-outlined.Mui-focused": {
+      color: "#CFB491",
+    },
+    "& .MuiOutlinedInput-input": {
+      color: "#5d5d5d",
+    },
+  },
+  errorMessage: {
+    color: "#EF6663",
+    fontSize: "0.9rem",
   },
   toggleButton1: {
     color: "#98CDC6",
@@ -210,6 +245,7 @@ const useStyles = makeStyles({
     color: "#CFB491",
     fontSize: "0.8rem",
   },
+  toggleBox: { marginTop: "55px" },
   toggleMessage: {
     marginRight: "15px",
     fontSize: "1rem",

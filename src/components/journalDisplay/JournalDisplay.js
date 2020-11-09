@@ -30,30 +30,32 @@ export default function JournalDisplay({
   const customStyle = { position: scrolled ? "sticky" : "relative" };
 
   return (
-    <div className={classes.journalContainer} ref={journalRef}>
-      {journalData && (
-        <div className={classes.journalContent} style={customStyle}>
-          <Typography
-            variant='h5'
-            component='h2'
-            className={classes.journalDate}
-          >
-            <span className={classes.date}>{date}</span> {month} {year},{" "}
-            <span className={classes.day}>{day}</span>
-            <span className={classes.time}>
-              ({hour}:{minute} {term})
-            </span>
-          </Typography>
+    <>
+      {journalData && timestamp && (
+        <div className={classes.journalContainer} ref={journalRef}>
+          <div className={classes.journalContent} style={customStyle}>
+            <Typography
+              variant='h5'
+              component='h2'
+              className={classes.journalDate}
+            >
+              <span className={classes.date}>{date}</span> {month} {year},{" "}
+              <span className={classes.day}>{day}</span>
+              <span className={classes.time}>
+                ({hour}:{minute} {term})
+              </span>
+            </Typography>
 
-          <Typography
-            variant='body2'
-            component='p'
-            className={classes.journalDescription}
-          >
-            {journalContent}
-          </Typography>
+            <Typography
+              variant='body2'
+              component='p'
+              className={classes.journalDescription}
+            >
+              {journalContent}
+            </Typography>
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

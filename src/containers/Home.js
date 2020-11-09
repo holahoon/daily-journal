@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { makeStyles, Button } from "@material-ui/core";
+import { makeStyles, Button, Typography } from "@material-ui/core";
 import { AddCircle } from "@material-ui/icons";
 
 import JournalDisplay from "components/journalDisplay/JournalDisplay";
@@ -8,8 +8,8 @@ import ContentCard from "components/contentCard/ContentCard";
 import firebaseDB from "utils/firebaseInstance";
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 
-function Home() {
-  const { userData } = useAuthStateValue()[0];
+export default function Home() {
+  const { userData, userDataError } = useAuthStateValue()[0];
   const [journalData, setJournalData] = useState([]);
   const [selectedJournalIndex, setSelectedJournalIndex] = useState(0);
   const history = useHistory();
@@ -52,39 +52,56 @@ function Home() {
       .delete();
   };
 
-  return (
-    <div className={classes.home}>
-      <div className={classes.writeNew}>
-        <Link to='/write'>
-          <Button variant='outlined'>
-            <AddCircle /> write new
-          </Button>
-        </Link>
-      </div>
-
-      <div className={classes.container}>
-        {/* Left side */}
-        <div className={classes.cardContainer}>
-          {journalData.map((data, i) => (
-            <ContentCard
-              key={i}
-              dataIndex={i}
-              journalData={data}
-              getJournal={getJournal}
-              onEdit={onEditHandler}
-              onDelete={onDeleteHandler}
-            />
-          ))}
-        </div>
-
-        {/* Right side */}
-        <JournalDisplay
-          classes={classes}
-          journalData={journalData}
-          selectedJournalIndex={selectedJournalIndex}
-        />
-      </div>
+  const introMessage = (
+    <div className={classes.introMessage}>
+      <Typography variant='h3' component='h2' className={classes.header}>
+        Welcome to MyBook!
+      </Typography>
+      <Typography variant='body2' component='p' className={classes.subHeader}>
+        Please <Link to='/auth'>log in</Link> to start
+      </Typography>
     </div>
+  );
+
+  return (
+    <>
+      {!userData && userDataError ? (
+        <>{introMessage}</>
+      ) : (
+        <div className={classes.home}>
+          <div className={classes.writeNew}>
+            <Link to='/write'>
+              <Button variant='outlined'>
+                <AddCircle /> write new
+              </Button>
+            </Link>
+          </div>
+
+          <div className={classes.container}>
+            {/* Left side */}
+            <div className={classes.cardContainer}>
+              {journalData.map((data, i) => (
+                <ContentCard
+                  key={i}
+                  dataIndex={i}
+                  journalData={data}
+                  getJournal={getJournal}
+                  onEdit={onEditHandler}
+                  onDelete={onDeleteHandler}
+                />
+              ))}
+            </div>
+
+            {/* Right side */}
+            <JournalDisplay
+              classes={classes}
+              journalData={journalData}
+              selectedJournalIndex={selectedJournalIndex}
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -157,6 +174,26 @@ const useStyles = makeStyles({
     fontSize: "0.85rem",
     color: "#4f4f4f",
   },
+  introMessage: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+  },
+  header: {
+    marginBottom: "10px",
+    fontSize: "1.7rem",
+    color: "#98CDC6",
+    textAlign: "center",
+  },
+  subHeader: {
+    fontSize: "1.2rem",
+    color: "#b4b4b4",
+    textAlign: "center",
+    "& a": {
+      color: "#b4b4b4",
+      textDecoration: "none",
+      fontWeight: "bold",
+    },
+  },
 });
-
-export default Home;
