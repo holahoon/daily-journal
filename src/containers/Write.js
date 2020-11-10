@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useHistory, Redirect, withRouter } from "react-router-dom";
 import firebase from "firebase";
-import { makeStyles, Button, Typography } from "@material-ui/core";
+import { makeStyles, Button } from "@material-ui/core";
 
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 import firebaseDB from "utils/firebaseInstance";
