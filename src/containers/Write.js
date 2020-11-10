@@ -4,7 +4,7 @@ import firebase from "firebase";
 import { makeStyles, Button } from "@material-ui/core";
 
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
-import firebaseDB from "utils/firebaseInstance";
+import firebaseDB from "shared/firebaseInstance";
 
 export default withRouter(function Write({ match }) {
   const [messageInputValue, setMessageInputValue] = useState("");

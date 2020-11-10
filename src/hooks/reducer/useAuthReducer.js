@@ -1,4 +1,8 @@
-import { SET_USER, SET_USER_FAIL, LOG_OUT } from "hooks/actionType/actionType";
+import {
+  SET_USER,
+  SET_USER_FAIL,
+  LOG_OUT,
+} from "shared/actionTypes/actionTypes";
 
 // - Initial user state (expect to receive an object when the user is authenticated)
 export const initialState = {

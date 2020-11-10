@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { Typography, Button } from "@material-ui/core";
 
-import { authService } from "utils/firebaseInstance";
-import { LOG_OUT } from "hooks/actionType/actionType";
+import { authService } from "shared/firebaseInstance";
+import { LOG_OUT } from "shared/actionTypes/actionTypes";
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 
 export default function Authentication({ classes }) {

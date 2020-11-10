@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
+import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import reportWebVitals from "./reportWebVitals";
 
@@ -10,7 +11,10 @@ import useAuthReducer, { initialState } from "hooks/reducer/useAuthReducer";
 import { rootReducer } from "reduxStore/reducers";
 import App from "./App";
 
-const reduxStore = createStore(rootReducer, composeWithDevTools());
+const reduxStore = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(thunk))
+);
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import {
   Card,
   Button,
@@ -9,9 +10,9 @@ import {
 } from "@material-ui/core";
 import { Edit, Delete } from "@material-ui/icons";
 
-import { getDate } from "utils/getDate";
+import { getDate } from "shared/getDate";
 
-export default function ContentCard({
+export default memo(function ContentCard({
   journalData,
   dataIndex,
   getJournal,
@@ -89,8 +90,9 @@ export default function ContentCard({
       )}
     </>
   );
-}
+});
 
+// Material ui styles hook
 const useStyles = makeStyles({
   cardContainer: {
     // width: "40vw",

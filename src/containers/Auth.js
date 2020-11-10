@@ -13,7 +13,7 @@ import { Face, Fingerprint, PersonAdd } from "@material-ui/icons";
 
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 import useAuthState from "hooks/useState/useAuthState";
-import { authService } from "utils/firebaseInstance";
+import { authService } from "shared/firebaseInstance";
 
 export default function Auth() {
   const { userData } = useAuthStateValue()[0];

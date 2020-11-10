@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
-import { SET_USER, SET_USER_FAIL } from "hooks/actionType/actionType";
-import { authService } from "utils/firebaseInstance";
+import { SET_USER, SET_USER_FAIL } from "shared/actionTypes/actionTypes";
+import { authService } from "shared/firebaseInstance";
 import AppRouter from "components/route/Router";
 
 import "./App.css";
