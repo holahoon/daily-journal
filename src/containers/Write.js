@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
 import { useHistory, Redirect, withRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-// import firebase from "firebase";
 import { makeStyles, Button } from "@material-ui/core";
 
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
-// import firebaseDB from "shared/firebaseInstance";
 import {
   editJournalAction,
   writeJournalAction,
@@ -41,53 +39,16 @@ export default withRouter(function Write({ match }) {
 
   const editJournal = (userData, urlDocId, messageInputValue) => {
     dispatch(editJournalAction(userData, urlDocId, messageInputValue));
-    // firebaseDB
-    //   .collection("users")
-    //   .doc(userData.uid)
-    //   .collection("daily-journals")
-    //   .doc(match.params.docId)
-    //   .update({
-    //     journal: messageInputValue,
-    //   })
-    //   .then(() => {
-    //     setIsDataSet(true);
-    //   })
-    //   .catch((err) => console.log(err));
   };
 
   const writeNewJournal = (userData, messageInputValue) => {
     dispatch(writeJournalAction(userData, messageInputValue));
-    // firebaseDB
-    //   .collection("users")
-    //   .doc(userData.uid)
-    //   .collection("daily-journals")
-    //   .add({
-    //     journal: messageInputValue,
-    //     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    //   })
-    //   .then(() => {
-    //     setIsDataSet(true);
-    //   })
-    //   .catch((err) => console.log(err));
   };
 
   const getJournal = (journalsArray, urlDocId) => {
     journalsArray.filter(
       (each) => each.id === urlDocId && setMessageInputValue(each.data.journal)
     );
-    // firebaseDB
-    //   .collection("users")
-    //   .doc(uid)
-    //   .collection("daily-journals")
-    //   .doc(docId)
-    //   .get()
-    //   .then((doc) => {
-    //     if (doc.exists) {
-    //       setMessageInputValue(doc.data().journal);
-    //     } else {
-    //       console.log("No such document!");
-    //     }
-    //   });
   };
 
   const onChangeHandler = (e) => {

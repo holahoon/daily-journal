@@ -8,12 +8,11 @@ import JournalDisplay from "components/journalDisplay/JournalDisplay";
 import ContentCard from "components/contentCard/ContentCard";
 import firebaseDB from "shared/firebaseInstance";
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
-// import * as actionTypes from "shared/actionTypes/actionTypes";
 import { getJournalsAction } from "reduxStore/actions/journalActions";
 
 export default function Home() {
   const { userData, userDataError } = useAuthStateValue()[0];
-  // const [journalData, setJournalData] = useState([]);
+
   const [selectedJournalIndex, setSelectedJournalIndex] = useState(0);
 
   const history = useHistory();
@@ -34,21 +33,6 @@ export default function Home() {
   useEffect(() => {
     if (userData) {
       onGetJournals(userData);
-      // firebaseDB
-      //   .collection("users")
-      //   .doc(userData.uid)
-      //   .collection("daily-journals")
-      //   .orderBy("timestamp", "desc")
-      //   .onSnapshot((snapshot) =>
-      //     setJournalData(
-      //       snapshot.docs.map((doc) => {
-      //         return {
-      //           id: doc.id,
-      //           data: doc.data(),
-      //         };
-      //       })
-      //     )
-      //   );
     }
   }, [onGetJournals, userData]);
 

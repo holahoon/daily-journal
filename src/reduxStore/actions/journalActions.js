@@ -1,4 +1,4 @@
-/* Journal Action Creators */
+/* Journal Actions Creators */
 import firebase from "firebase";
 import * as actionTypes from "shared/actionTypes/actionTypes";
 import firebaseDB from "shared/firebaseInstance";
@@ -134,7 +134,30 @@ export const editJournalAction = (userData, urlDocId, messageInputvalue) => {
 };
 
 /* Delete Journals Actions */
-export const deleteAllJournalsAction = () => {
+export const deleteJournalStart = () => {
+  return {
+    type: actionTypes.DELETE_JOURNAL_START,
+  };
+};
+
+export const deleteJournalSuccess = () => {
+  return {
+    type: actionTypes.DELETE_JOURNAL_SUCCESS,
+  };
+};
+
+export const deleteJournalFail = () => {
+  return {
+    type: actionTypes.DELETE_JOURNAL_FAIL,
+  };
+};
+
+export const deleteAllJournalAction = () => {
+  return {};
+};
+
+/* Empty Journals On Log Out Actions */
+export const emptyJournalsOnLogOut = () => {
   return {
     type: actionTypes.EMPTY_JOURNALS_ON_LOGOUT,
   };
