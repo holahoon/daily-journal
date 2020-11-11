@@ -90,7 +90,8 @@ export const writeJournalAction = (userData, messageInputValue) => {
       .collection("daily-journals")
       .add({
         journal: messageInputValue,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        timestamp: new Date(),
+        //   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       })
       .then(() => dispatch(writeJournalSuccess()))
       .catch((error) => dispatch(writeJournalFail(error)));
