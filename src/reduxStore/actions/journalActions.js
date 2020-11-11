@@ -132,3 +132,10 @@ export const editJournalAction = (userData, urlDocId, messageInputvalue) => {
       .catch((error) => dispatch(editJournalFail(error)));
   };
 };
+
+/* Delete Journals Actions */
+export const deleteAllJournalsAction = () => {
+  return {
+    type: actionTypes.EMPTY_JOURNALS_ON_LOGOUT,
+  };
+};

@@ -36,7 +36,6 @@ export const journalReducer = (state = initialState, action) => {
     case actionTypes.WRITE_JOURNAL_SUCCESS:
       return {
         ...state,
-        //   journals: action.journalsData,
         error: null,
         loading: false,
       };
@@ -62,6 +61,31 @@ export const journalReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.error,
+        loading: false,
+      };
+    case actionTypes.DELETE_JOURNAL_START:
+      return {
+        ...state,
+        error: null,
+        loading: true,
+      };
+    case actionTypes.DELETE_JOURNAL_SUCCESS:
+      return {
+        ...state,
+        error: null,
+        loading: false,
+      };
+    case actionTypes.DELETE_JOURNAL_FAIL:
+      return {
+        ...state,
+        error: action.error,
+        loading: false,
+      };
+    case actionTypes.EMPTY_JOURNALS_ON_LOGOUT:
+      return {
+        ...state,
+        journals: [],
+        error: null,
         loading: false,
       };
     default:
