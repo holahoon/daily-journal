@@ -29,17 +29,41 @@ export const journalReducer = (state = initialState, action) => {
         loading: false,
       };
     case actionTypes.WRITE_JOURNAL_START:
-      return;
+      return {
+        ...state,
+        loading: true,
+      };
     case actionTypes.WRITE_JOURNAL_SUCCESS:
-      return;
+      return {
+        ...state,
+        //   journals: action.journalsData,
+        error: null,
+        loading: false,
+      };
     case actionTypes.WRITE_JOURNAL_FAIL:
-      return;
+      return {
+        ...state,
+        error: action.error,
+        loading: false,
+      };
     case actionTypes.EDIT_JOURNAL_START:
-      return;
+      return {
+        ...state,
+        error: null,
+        loading: true,
+      };
     case actionTypes.EDIT_JOURNAL_SUCCESS:
-      return;
+      return {
+        ...state,
+        error: null,
+        loading: false,
+      };
     case actionTypes.EDIT_JOURNAL_FAIL:
-      return;
+      return {
+        ...state,
+        error: action.error,
+        loading: false,
+      };
     default:
       return state;
   }

@@ -9,7 +9,7 @@ import ContentCard from "components/contentCard/ContentCard";
 import firebaseDB from "shared/firebaseInstance";
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 // import * as actionTypes from "shared/actionTypes/actionTypes";
-import { getJournals } from "reduxStore/actions/journalActions";
+import { getJournalsAction } from "reduxStore/actions/journalActions";
 
 export default function Home() {
   const { userData, userDataError } = useAuthStateValue()[0];
@@ -26,7 +26,7 @@ export default function Home() {
 
   const onGetJournals = useCallback(
     (userData) => {
-      dispatch(getJournals(userData));
+      dispatch(getJournalsAction(userData));
     },
     [dispatch]
   );
