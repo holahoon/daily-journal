@@ -1,5 +1,4 @@
 /* Journal Actions Creators */
-import firebase from "firebase";
 import * as actionTypes from "shared/actionTypes/actionTypes";
 import firebaseDB from "shared/firebaseInstance";
 
@@ -31,33 +30,36 @@ export const getJournalsAction = (userData) => {
       .collection("users")
       .doc(userData.uid)
       .collection("daily-journals")
+      // .orderBy("timestamp", "desc")
+      // .get()
+      // .then((snapshot) => {
+      //   const fetchedJournals = [];
+      //   snapshot.forEach((doc) => {
+      //     fetchedJournals.push({
+      //       id: doc.id,
+      //       data: doc.data(),
+      //     });
+      //   });
+      //   dispatch(getJournalsSuccess(fetchedJournals));
+      // })
+      // .catch((error) => {
+      //   console.log("getJournalsAction: ", error);
+      //   dispatch(getJournalsFail(error));
+      // });
       .orderBy("timestamp", "desc")
-      .get()
-      .then((snapshot) => {
-        const fetchedJournals = [];
-        snapshot.forEach((doc) => {
-          fetchedJournals.push({
-            id: doc.id,
-            data: doc.data(),
+      .onSnapshot(
+        (snapshot) => {
+          const fetchedJournals = [];
+          snapshot.docs.map((doc) => {
+            return fetchedJournals.push({
+              id: doc.id,
+              data: doc.data(),
+            });
           });
-        });
-        dispatch(getJournalsSuccess(fetchedJournals));
-      })
-      .catch((error) => dispatch(getJournalsFail(error)));
-    // .orderBy("timestamp", "desc")
-    // .onSnapshot(
-    //   (snapshot) => {
-    //     const fetchedJournals = [];
-    //     snapshot.docs.map((doc) => {
-    //       return fetchedJournals.push({
-    //         id: doc.id,
-    //         data: doc.data(),
-    //       });
-    //     });
-    //     dispatch(getJournalsSuccess(fetchedJournals));
-    //   },
-    //   (error) => dispatch(getJournalsFail(error))
-    // );
+          dispatch(getJournalsSuccess(fetchedJournals));
+        },
+        (error) => dispatch(getJournalsFail(error))
+      );
   };
 };
 
@@ -94,7 +96,10 @@ export const writeJournalAction = (userData, messageInputValue) => {
         //   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       })
       .then(() => dispatch(writeJournalSuccess()))
-      .catch((error) => dispatch(writeJournalFail(error)));
+      .catch((error) => {
+        console.log("writeJournalAction: ", error);
+        dispatch(writeJournalFail(error));
+      });
   };
 };
 
@@ -130,7 +135,10 @@ export const editJournalAction = (userData, urlDocId, messageInputvalue) => {
         journal: messageInputvalue,
       })
       .then(() => dispatch(editJournalSuccess()))
-      .catch((error) => dispatch(editJournalFail(error)));
+      .catch((error) => {
+        console.log("editJournalAction: ", error);
+        dispatch(editJournalFail(error));
+      });
   };
 };
 
@@ -147,14 +155,28 @@ export const deleteJournalSuccess = () => {
   };
 };
 
-export const deleteJournalFail = () => {
+export const deleteJournalFail = (error) => {
   return {
     type: actionTypes.DELETE_JOURNAL_FAIL,
+    error,
   };
 };
 
-export const deleteAllJournalAction = () => {
-  return {};
+export const deleteAllJournalAction = (userData, urlDocId) => {
+  return (dispatch) => {
+    dispatch(deleteJournalStart());
+    firebaseDB
+      .collection("users")
+      .doc(userData.uid)
+      .collection("daily-journals")
+      .doc(urlDocId)
+      .delete()
+      .then(() => dispatch(deleteJournalSuccess()))
+      .catch((error) => {
+        console.log("deleteJournalAction: ", error);
+        dispatch(deleteJournalFail(error));
+      });
+  };
 };
 
 /* Empty Journals On Log Out Actions */
@@ -163,3 +185,11 @@ export const emptyJournalsOnLogOut = () => {
     type: actionTypes.EMPTY_JOURNALS_ON_LOGOUT,
   };
 };
+
+// /* Set Redirect Path */
+// export const setRedirectPath = (path) => {
+//   return {
+//     type: actionTypes.SET_REDIRECT_PATH,
+//     path,
+//   };
+// };

@@ -7,6 +7,7 @@ import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 import {
   editJournalAction,
   writeJournalAction,
+  setRedirectPath,
 } from "reduxStore/actions/journalActions";
 
 export default withRouter(function Write({ match }) {
@@ -20,32 +21,41 @@ export default withRouter(function Write({ match }) {
   const classes = useStyles();
 
   const journals = useSelector((state) => state.journalReducer.journals);
+  const journalWritten = useSelector(
+    (state) => state.journalReducer.journalWritten
+  );
 
-  const dispatch = useDispatch();
+  const reduxDispatch = useDispatch();
 
   useEffect(() => {
     if (match.params.docId && userData) {
-      getJournal(journals, match.params.docId);
+      getJournalOnLoad(journals, match.params.docId);
     }
-    // return () => getJournal;
   }, [journals, userData, match]);
 
+  // useEffect(() => {
+  //   return () => {
+  //     setIsDataSet(false);
+  //     setMessageInputValue("");
+  //   };
+  // }, []);
+
   useEffect(() => {
-    return () => {
-      setIsDataSet(false);
-      setMessageInputValue("");
-    };
-  }, []);
+    if (!userData || (journals && journalWritten)) {
+      history.push("/");
+    }
+    return () => setMessageInputValue("");
+  }, [journals, userData, journalWritten, history]);
 
   const editJournal = (userData, urlDocId, messageInputValue) => {
-    dispatch(editJournalAction(userData, urlDocId, messageInputValue));
+    reduxDispatch(editJournalAction(userData, urlDocId, messageInputValue));
   };
 
   const writeNewJournal = (userData, messageInputValue) => {
-    dispatch(writeJournalAction(userData, messageInputValue));
+    reduxDispatch(writeJournalAction(userData, messageInputValue));
   };
 
-  const getJournal = (journalsArray, urlDocId) => {
+  const getJournalOnLoad = (journalsArray, urlDocId) => {
     journalsArray.filter(
       (each) => each.id === urlDocId && setMessageInputValue(each.data.journal)
     );
@@ -73,42 +83,42 @@ export default withRouter(function Write({ match }) {
   };
 
   return (
-    <>
-      {isDataSet || !userData ? (
-        <Redirect to='/' />
-      ) : (
-        <div className={classes.write}>
-          <form className={classes.form}>
-            <textarea
-              autoFocus
-              className={classes.textArea}
-              rows='1'
-              placeholder='Write your thoughts here...'
-              name='messageText'
-              value={messageInputValue}
-              onChange={onChangeHandler}
-            />
-          </form>
+    // <>
+    //   {journalWritten || !userData ? (
+    //     <Redirect to='/' />
+    //   ) : (
+    <div className={classes.write}>
+      <form className={classes.form}>
+        <textarea
+          autoFocus
+          className={classes.textArea}
+          rows='1'
+          placeholder='Write your thoughts here...'
+          name='messageText'
+          value={messageInputValue}
+          onChange={onChangeHandler}
+        />
+      </form>
 
-          <div className={classes.buttonContainer}>
-            <Button
-              variant='outlined'
-              className={classes.saveButton}
-              onClick={onSaveHandler}
-            >
-              save
-            </Button>
-            <Button
-              variant='outlined'
-              className={classes.cancelButton}
-              onClick={onCancelHandler}
-            >
-              cancel
-            </Button>
-          </div>
-        </div>
-      )}
-    </>
+      <div className={classes.buttonContainer}>
+        <Button
+          variant='outlined'
+          className={classes.saveButton}
+          onClick={onSaveHandler}
+        >
+          save
+        </Button>
+        <Button
+          variant='outlined'
+          className={classes.cancelButton}
+          onClick={onCancelHandler}
+        >
+          cancel
+        </Button>
+      </div>
+    </div>
+    //   )}
+    // </>
   );
 });
 

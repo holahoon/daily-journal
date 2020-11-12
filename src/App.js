@@ -1,15 +1,27 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
+import { useDispatch } from "react-redux";
 
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 import { SET_USER, SET_USER_FAIL } from "shared/actionTypes/actionTypes";
 import { authService } from "shared/firebaseInstance";
 import AppRouter from "components/route/Router";
+import { getJournalsAction } from "reduxStore/actions/journalActions";
 
 import "./App.css";
 
 function App() {
-  const dispatch = useAuthStateValue()[1];
+  const [{ userData }, dispatch] = useAuthStateValue();
 
+  const reduxDispatch = useDispatch();
+
+  const onGetJournals = useCallback(
+    (userData) => {
+      reduxDispatch(getJournalsAction(userData));
+    },
+    [reduxDispatch]
+  );
+
+  /* User authentication */
   useEffect(() => {
     // - Check if the user is logged in (user object will return an object if logged in)
     authService.onAuthStateChanged((user) => {
@@ -28,6 +40,13 @@ function App() {
       }
     });
   }, [dispatch]);
+
+  /* User authentication */
+  useEffect(() => {
+    if (userData) {
+      onGetJournals(userData);
+    }
+  }, [onGetJournals, userData]);
 
   return (
     <>
