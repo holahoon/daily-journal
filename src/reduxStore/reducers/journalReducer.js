@@ -6,7 +6,6 @@ const initialState = {
   journalWritten: false,
   error: null,
   loading: false,
-  // redirectPath: "/",
 };
 
 const updateObject = (oldObject, updatedProperties) => {
@@ -20,9 +19,12 @@ const start = (state) => {
   return updateObject(state, { error: null, loading: true });
 };
 
+// const getStart = (state) => {
+//   return updateObject(state, { error: null, loading: true });
+// };
+
 const getSuccess = (state, action) => {
   return updateObject(state, {
-    // journals: [...action.journalsData],
     journals: action.journalsData,
     journalWritten: false,
     error: null,
@@ -34,7 +36,7 @@ const writeSuccess = (state) => {
   return updateObject(state, {
     journalWritten: true,
     error: null,
-    loading: false,
+    // loading: false,
   });
 };
 
@@ -42,7 +44,7 @@ const successWithoutAction = (state) => {
   return updateObject(state, {
     journalWritten: false,
     error: null,
-    loading: false,
+    // loading: false,
   });
 };
 
@@ -60,15 +62,9 @@ const emptyJournal = (state) => {
     journalWritten: false,
     error: null,
     loading: false,
-    redirectPath: "/",
+    // redirectPath: "/",
   });
 };
-
-// const redirectPath = (state, action) => {
-//   return updateObject(state, {
-//     redirectPath: action.path,
-//   });
-// };
 
 export const journalReducer = (state = initialState, action) => {
   switch (action.type) {

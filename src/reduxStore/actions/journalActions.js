@@ -30,36 +30,36 @@ export const getJournalsAction = (userData) => {
       .collection("users")
       .doc(userData.uid)
       .collection("daily-journals")
-      // .orderBy("timestamp", "desc")
-      // .get()
-      // .then((snapshot) => {
-      //   const fetchedJournals = [];
-      //   snapshot.forEach((doc) => {
-      //     fetchedJournals.push({
-      //       id: doc.id,
-      //       data: doc.data(),
-      //     });
-      //   });
-      //   dispatch(getJournalsSuccess(fetchedJournals));
-      // })
-      // .catch((error) => {
-      //   console.log("getJournalsAction: ", error);
-      //   dispatch(getJournalsFail(error));
-      // });
       .orderBy("timestamp", "desc")
-      .onSnapshot(
-        (snapshot) => {
-          const fetchedJournals = [];
-          snapshot.docs.map((doc) => {
-            return fetchedJournals.push({
-              id: doc.id,
-              data: doc.data(),
-            });
+      .get()
+      .then((snapshot) => {
+        const fetchedJournals = [];
+        snapshot.forEach((doc) => {
+          fetchedJournals.push({
+            id: doc.id,
+            data: doc.data(),
           });
-          dispatch(getJournalsSuccess(fetchedJournals));
-        },
-        (error) => dispatch(getJournalsFail(error))
-      );
+        });
+        dispatch(getJournalsSuccess(fetchedJournals));
+      })
+      .catch((error) => {
+        console.log("getJournalsAction: ", error);
+        dispatch(getJournalsFail(error));
+      });
+    // .orderBy("timestamp", "desc")
+    // .onSnapshot(
+    //   (snapshot) => {
+    //     const fetchedJournals = [];
+    //     snapshot.docs.map((doc) => {
+    //       return fetchedJournals.push({
+    //         id: doc.id,
+    //         data: doc.data(),
+    //       });
+    //     });
+    //     dispatch(getJournalsSuccess(fetchedJournals));
+    //   },
+    //   (error) => dispatch(getJournalsFail(error))
+    // );
   };
 };
 
@@ -95,7 +95,10 @@ export const writeJournalAction = (userData, messageInputValue) => {
         timestamp: new Date(),
         //   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       })
-      .then(() => dispatch(writeJournalSuccess()))
+      .then(() => {
+        dispatch(writeJournalSuccess());
+        dispatch(getJournalsAction(userData));
+      })
       .catch((error) => {
         console.log("writeJournalAction: ", error);
         dispatch(writeJournalFail(error));
@@ -134,7 +137,10 @@ export const editJournalAction = (userData, urlDocId, messageInputvalue) => {
       .update({
         journal: messageInputvalue,
       })
-      .then(() => dispatch(editJournalSuccess()))
+      .then(() => {
+        dispatch(editJournalSuccess());
+        dispatch(getJournalsAction(userData));
+      })
       .catch((error) => {
         console.log("editJournalAction: ", error);
         dispatch(editJournalFail(error));
@@ -171,7 +177,10 @@ export const deleteAllJournalAction = (userData, urlDocId) => {
       .collection("daily-journals")
       .doc(urlDocId)
       .delete()
-      .then(() => dispatch(deleteJournalSuccess()))
+      .then(() => {
+        dispatch(deleteJournalSuccess());
+        dispatch(getJournalsAction(userData));
+      })
       .catch((error) => {
         console.log("deleteJournalAction: ", error);
         dispatch(deleteJournalFail(error));

@@ -9,7 +9,7 @@ import ContentCard from "components/contentCard/ContentCard";
 // import firebaseDB from "shared/firebaseInstance";
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 import {
-  getJournalsAction,
+  // getJournalsAction,
   deleteAllJournalAction,
 } from "reduxStore/actions/journalActions";
 
@@ -26,12 +26,12 @@ export default function Home() {
 
   const journalsData = useSelector((state) => state.journalReducer.journals);
 
-  const onGetJournals = useCallback(
-    (userData) => {
-      dispatch(getJournalsAction(userData));
-    },
-    [dispatch]
-  );
+  // const onGetJournals = useCallback(
+  //   (userData) => {
+  //     dispatch(getJournalsAction(userData));
+  //   },
+  //   [dispatch]
+  // );
 
   const onDeleteJournal = useCallback(
     (userData, docId) => {
