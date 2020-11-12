@@ -23,7 +23,6 @@ export default function Auth() {
     userName: "",
     email: "",
     password: "",
-    showPassword: false,
   });
   const [isNewAccount, setIsNewAccount] = useState(false);
   const [authError, setAuthError] = useState("");

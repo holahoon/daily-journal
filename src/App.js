@@ -29,10 +29,14 @@ function App() {
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
       if (user) {
+        console.log(user);
         // - If user is found (logged in)
         dispatch({
           type: actionTypes.SET_USER_SUCCESS,
-          userData: user,
+          userData: {
+            uid: user.uid,
+            displayName: user.displayName,
+          },
         });
       } else {
         // - If no user is return (failed - not logged in)

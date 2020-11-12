@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Typography, Button } from "@material-ui/core";
@@ -10,7 +11,14 @@ import { emptyJournalsOnLogOut } from "reduxStore/actions/journalActions";
 export default function Authentication({ classes }) {
   const [{ userData }, dispatch] = useAuthStateValue();
 
+  const [userName, setUserName] = useState("");
+
   const reduxDispatch = useDispatch();
+
+  useEffect(() => {
+    console.log(userData);
+    userData && setUserName(userData.displayName);
+  }, [userData]);
 
   const onLogOutHandler = () => {
     // Sign out of firebase auth
@@ -22,9 +30,10 @@ export default function Authentication({ classes }) {
     reduxDispatch(emptyJournalsOnLogOut());
   };
 
-  const userName = userData ? (
+  const toggleUserName = userData ? (
     <Typography variant='h6' className={classes.userName}>
-      {userData.displayName}
+      {/* {userData.displayName} */}
+      {userName}
     </Typography>
   ) : (
     <Link to='/auth' className={classes.logIn}>
@@ -34,7 +43,7 @@ export default function Authentication({ classes }) {
 
   return (
     <div className={classes.container}>
-      {userName}
+      {toggleUserName}
       {userData && (
         <Button className={classes.logOut} onClick={onLogOutHandler}>
           log out
