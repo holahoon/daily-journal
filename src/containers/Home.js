@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { makeStyles, Button, Typography } from "@material-ui/core";
@@ -6,12 +6,9 @@ import { AddCircle } from "@material-ui/icons";
 
 import JournalDisplay from "components/journalDisplay/JournalDisplay";
 import ContentCard from "components/contentCard/ContentCard";
-// import firebaseDB from "shared/firebaseInstance";
+import Spinner from "components/UI/Spinner";
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
-import {
-  // getJournalsAction,
-  deleteAllJournalAction,
-} from "reduxStore/actions/journalActions";
+import { deleteAllJournalAction } from "reduxStore/actions/journalActions";
 
 export default function Home() {
   const { userData, userDataError } = useAuthStateValue()[0];
@@ -25,13 +22,7 @@ export default function Home() {
   const dispatch = useDispatch();
 
   const journalsData = useSelector((state) => state.journalReducer.journals);
-
-  // const onGetJournals = useCallback(
-  //   (userData) => {
-  //     dispatch(getJournalsAction(userData));
-  //   },
-  //   [dispatch]
-  // );
+  const isLoading = useSelector((state) => state.journalReducer.loading);
 
   const onDeleteJournal = useCallback(
     (userData, docId) => {
@@ -39,12 +30,6 @@ export default function Home() {
     },
     [dispatch]
   );
-
-  // useEffect(() => {
-  //   if (userData) {
-  //     onGetJournals(userData);
-  //   }
-  // }, [onGetJournals, userData]);
 
   const getJournal = useCallback((dataIndex) => {
     setSelectedJournalIndex(dataIndex);
@@ -74,38 +59,41 @@ export default function Home() {
       {!userData && userDataError ? (
         <>{introMessage}</>
       ) : (
-        <div className={classes.home}>
-          <div className={classes.writeNew}>
-            <Link to='/write'>
-              <Button variant='outlined'>
-                <AddCircle /> write new
-              </Button>
-            </Link>
-          </div>
-
-          <div className={classes.container}>
-            {/* Left side */}
-            <div className={classes.cardContainer}>
-              {journalsData.map((data, i) => (
-                <ContentCard
-                  key={i}
-                  dataIndex={i}
-                  journalData={data}
-                  getJournal={getJournal}
-                  onEdit={onEditHandler}
-                  onDelete={onDeleteHandler}
-                />
-              ))}
+        <>
+          {isLoading && <Spinner />}
+          <div className={classes.home}>
+            <div className={classes.writeNew}>
+              <Link to='/write'>
+                <Button variant='outlined'>
+                  <AddCircle /> write new
+                </Button>
+              </Link>
             </div>
 
-            {/* Right side */}
-            <JournalDisplay
-              classes={classes}
-              journalsData={journalsData}
-              selectedJournalIndex={selectedJournalIndex}
-            />
+            <div className={classes.container}>
+              {/* Left side */}
+              <div className={classes.cardContainer}>
+                {journalsData.map((data, i) => (
+                  <ContentCard
+                    key={i}
+                    dataIndex={i}
+                    journalData={data}
+                    getJournal={getJournal}
+                    onEdit={onEditHandler}
+                    onDelete={onDeleteHandler}
+                  />
+                ))}
+              </div>
+
+              {/* Right side */}
+              <JournalDisplay
+                classes={classes}
+                journalsData={journalsData}
+                selectedJournalIndex={selectedJournalIndex}
+              />
+            </div>
           </div>
-        </div>
+        </>
       )}
     </>
   );

@@ -19,10 +19,6 @@ const start = (state) => {
   return updateObject(state, { error: null, loading: true });
 };
 
-// const getStart = (state) => {
-//   return updateObject(state, { error: null, loading: true });
-// };
-
 const getSuccess = (state, action) => {
   return updateObject(state, {
     journals: action.journalsData,
@@ -36,7 +32,6 @@ const writeSuccess = (state) => {
   return updateObject(state, {
     journalWritten: true,
     error: null,
-    // loading: false,
   });
 };
 
@@ -44,7 +39,6 @@ const successWithoutAction = (state) => {
   return updateObject(state, {
     journalWritten: false,
     error: null,
-    // loading: false,
   });
 };
 
@@ -62,7 +56,6 @@ const emptyJournal = (state) => {
     journalWritten: false,
     error: null,
     loading: false,
-    // redirectPath: "/",
   });
 };
 
@@ -94,8 +87,6 @@ export const journalReducer = (state = initialState, action) => {
       return fail(state, action);
     case actionTypes.EMPTY_JOURNALS_ON_LOGOUT:
       return emptyJournal(state);
-    // case actionTypes.SET_REDIRECT_PATH:
-    //   return redirectPath(state, action);
     default:
       return state;
   }

@@ -2,7 +2,7 @@ import { useEffect, useCallback } from "react";
 import { useDispatch } from "react-redux";
 
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
-import { SET_USER, SET_USER_FAIL } from "shared/actionTypes/actionTypes";
+import * as actionTypes from "shared/actionTypes/actionTypes";
 import { authService } from "shared/firebaseInstance";
 import AppRouter from "components/route/Router";
 import { getJournalsAction } from "reduxStore/actions/journalActions";
@@ -14,6 +14,7 @@ function App() {
 
   const reduxDispatch = useDispatch();
 
+  /* Get all journals from redux store by dispatching an action */
   const onGetJournals = useCallback(
     (userData) => {
       reduxDispatch(getJournalsAction(userData));
@@ -21,27 +22,27 @@ function App() {
     [reduxDispatch]
   );
 
-  /* User authentication */
+  /**
+   * Check if the user is logged in (user object will return an object if logged in)
+   * Dispatch an action here instead in the Auth.js login/signup handlers because this method will re-run whenever the authentication state changes in firebase
+   */
   useEffect(() => {
-    // - Check if the user is logged in (user object will return an object if logged in)
     authService.onAuthStateChanged((user) => {
-      // - Dispatch an action here instead in the Auth.js login/signup handlers because this method will re-run whenever the authentication state changes in firebase
       if (user) {
         // - If user is found (logged in)
         dispatch({
-          type: SET_USER,
+          type: actionTypes.SET_USER_SUCCESS,
           userData: user,
         });
       } else {
         // - If no user is return (failed - not logged in)
         dispatch({
-          type: SET_USER_FAIL,
+          type: actionTypes.SET_USER_FAIL,
         });
       }
     });
   }, [dispatch]);
 
-  /* User authentication */
   useEffect(() => {
     if (userData) {
       onGetJournals(userData);

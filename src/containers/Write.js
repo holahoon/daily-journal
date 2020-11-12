@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useHistory, Redirect, withRouter } from "react-router-dom";
+import { useHistory, withRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { makeStyles, Button } from "@material-ui/core";
 
@@ -7,12 +7,11 @@ import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 import {
   editJournalAction,
   writeJournalAction,
-  setRedirectPath,
 } from "reduxStore/actions/journalActions";
+import Spinner from "components/UI/Spinner";
 
 export default withRouter(function Write({ match }) {
   const [messageInputValue, setMessageInputValue] = useState("");
-  const [isDataSet, setIsDataSet] = useState(false);
 
   const { userData } = useAuthStateValue()[0];
 
@@ -24,6 +23,7 @@ export default withRouter(function Write({ match }) {
   const journalWritten = useSelector(
     (state) => state.journalReducer.journalWritten
   );
+  const isLoading = useSelector((state) => state.journalReducer.loading);
 
   const reduxDispatch = useDispatch();
 
@@ -32,13 +32,6 @@ export default withRouter(function Write({ match }) {
       getJournalOnLoad(journals, match.params.docId);
     }
   }, [journals, userData, match]);
-
-  // useEffect(() => {
-  //   return () => {
-  //     setIsDataSet(false);
-  //     setMessageInputValue("");
-  //   };
-  // }, []);
 
   useEffect(() => {
     if (!userData || (journals && journalWritten)) {
@@ -70,55 +63,49 @@ export default withRouter(function Write({ match }) {
   };
 
   const onSaveHandler = () => {
-    // [users] -> [userId] -> [daily-journals] -> [docId] -> {data object}
     if (userData && messageInputValue) {
       if (match.params.docId) {
-        // Edit
         editJournal(userData, match.params.docId, messageInputValue);
       } else {
-        // Write new
         writeNewJournal(userData, messageInputValue);
       }
     }
   };
 
   return (
-    // <>
-    //   {journalWritten || !userData ? (
-    //     <Redirect to='/' />
-    //   ) : (
-    <div className={classes.write}>
-      <form className={classes.form}>
-        <textarea
-          autoFocus
-          className={classes.textArea}
-          rows='1'
-          placeholder='Write your thoughts here...'
-          name='messageText'
-          value={messageInputValue}
-          onChange={onChangeHandler}
-        />
-      </form>
+    <>
+      {isLoading && <Spinner />}
+      <div className={classes.write}>
+        <form className={classes.form}>
+          <textarea
+            autoFocus
+            className={classes.textArea}
+            rows='1'
+            placeholder='Write your thoughts here...'
+            name='messageText'
+            value={messageInputValue}
+            onChange={onChangeHandler}
+          />
+        </form>
 
-      <div className={classes.buttonContainer}>
-        <Button
-          variant='outlined'
-          className={classes.saveButton}
-          onClick={onSaveHandler}
-        >
-          save
-        </Button>
-        <Button
-          variant='outlined'
-          className={classes.cancelButton}
-          onClick={onCancelHandler}
-        >
-          cancel
-        </Button>
+        <div className={classes.buttonContainer}>
+          <Button
+            variant='outlined'
+            className={classes.saveButton}
+            onClick={onSaveHandler}
+          >
+            save
+          </Button>
+          <Button
+            variant='outlined'
+            className={classes.cancelButton}
+            onClick={onCancelHandler}
+          >
+            cancel
+          </Button>
+        </div>
       </div>
-    </div>
-    //   )}
-    // </>
+    </>
   );
 });
 

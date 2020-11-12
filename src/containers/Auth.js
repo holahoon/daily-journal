@@ -14,9 +14,11 @@ import { Face, Fingerprint, PersonAdd } from "@material-ui/icons";
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 import useAuthState from "hooks/useState/useAuthState";
 import { authService } from "shared/firebaseInstance";
+import * as actionTypes from "shared/actionTypes/actionTypes";
+import Spinner from "components/UI/Spinner";
 
 export default function Auth() {
-  const { userData } = useAuthStateValue()[0];
+  const [{ userData, loading }, dispatch] = useAuthStateValue();
   const [form, onChangeHandler] = useAuthState({
     userName: "",
     email: "",
@@ -27,10 +29,11 @@ export default function Auth() {
   const [authError, setAuthError] = useState("");
   const classes = useStyles();
 
-  const onSubmitHandler = (event) => {
+  const onSubmitHandler = async (event) => {
     event.preventDefault();
     const { userName, email, password } = form;
 
+    dispatch({ type: actionTypes.SET_USER_START });
     if (isNewAccount) {
       // - Handle sign up
       signUpHandler(email, password, userName);
@@ -61,87 +64,87 @@ export default function Auth() {
     setIsNewAccount((prev) => !prev);
   };
 
-  return (
-    <>
-      {userData ? (
-        // Redirect the user to the main page if the user is already || has logged in || just signed up
-        <Redirect to='/' />
-      ) : (
-        <Paper elevation={2} className={classes.paper}>
-          <FormControl autoComplete='off' fullWidth className={classes.form}>
-            {isNewAccount && (
-              <Box
-                display='flex'
-                alignItems='center'
-                className={classes.userNameBox}
-              >
-                <PersonAdd />
-                <TextField
-                  label='User Name'
-                  variant='outlined'
-                  type='text'
-                  name='userName'
-                  value={form.userName}
-                  onChange={onChangeHandler}
-                />
-              </Box>
-            )}
+  const authComponentToRender =
+    userData && !loading ? (
+      // Redirect the user to the main page if the user is already || has logged in || just signed up
+      <Redirect to='/' />
+    ) : (
+      <Paper elevation={2} className={classes.paper}>
+        <FormControl autoComplete='off' fullWidth className={classes.form}>
+          {isNewAccount && (
             <Box
               display='flex'
               alignItems='center'
-              className={classes.emailBox}
+              className={classes.userNameBox}
             >
-              <Face />
+              <PersonAdd />
               <TextField
-                label='Email'
+                label='User Name'
                 variant='outlined'
                 type='text'
-                name='email'
-                value={form.email}
+                name='userName'
+                value={form.userName}
                 onChange={onChangeHandler}
               />
             </Box>
-            <Box
-              display='flex'
-              alignItems='center'
-              className={classes.passwordBox}
-            >
-              <Fingerprint />
-              <TextField
-                label='Password'
-                variant='outlined'
-                type='password'
-                name='password'
-                value={form.password}
-                onChange={onChangeHandler}
-              />
-            </Box>
-            <Button
+          )}
+          <Box display='flex' alignItems='center' className={classes.emailBox}>
+            <Face />
+            <TextField
+              label='Email'
               variant='outlined'
-              className={classes.toggleButton1}
-              onClick={onSubmitHandler}
-            >
-              {isNewAccount ? "sign up" : "login"}
-            </Button>
-          </FormControl>
-          <Typography variant='body1' className={classes.errorMessage}>
-            {authError}
-          </Typography>
-
-          <Box display='flex' alignItems='center' className={classes.toggleBox}>
-            <Typography variant='h6' className={classes.toggleMessage}>
-              {!isNewAccount ? "First time here?" : "Have we met before?"}
-            </Typography>
-            <Button
-              variant='outlined'
-              className={classes.toggleButton2}
-              onClick={toggleAuthMethod}
-            >
-              {!isNewAccount ? "Sign Up" : "Log In"}
-            </Button>
+              type='text'
+              name='email'
+              value={form.email}
+              onChange={onChangeHandler}
+            />
           </Box>
-        </Paper>
-      )}
+          <Box
+            display='flex'
+            alignItems='center'
+            className={classes.passwordBox}
+          >
+            <Fingerprint />
+            <TextField
+              label='Password'
+              variant='outlined'
+              type='password'
+              name='password'
+              value={form.password}
+              onChange={onChangeHandler}
+            />
+          </Box>
+          <Button
+            variant='outlined'
+            className={classes.toggleButton1}
+            onClick={onSubmitHandler}
+          >
+            {isNewAccount ? "sign up" : "login"}
+          </Button>
+        </FormControl>
+        <Typography variant='body1' className={classes.errorMessage}>
+          {authError}
+        </Typography>
+
+        <Box display='flex' alignItems='center' className={classes.toggleBox}>
+          <Typography variant='h6' className={classes.toggleMessage}>
+            {!isNewAccount ? "First time here?" : "Have we met before?"}
+          </Typography>
+          <Button
+            variant='outlined'
+            className={classes.toggleButton2}
+            onClick={toggleAuthMethod}
+          >
+            {!isNewAccount ? "Sign Up" : "Log In"}
+          </Button>
+        </Box>
+      </Paper>
+    );
+
+  return (
+    <>
+      {loading && <Spinner />}
+      {authComponentToRender}
     </>
   );
 }
