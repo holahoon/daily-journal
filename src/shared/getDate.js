@@ -44,7 +44,7 @@ const getDateFromData = (dateToUse = currentTime, dateType) => {
     case DAY:
       return `${dayArray[dateToUse.getDay()]}`;
     case HOUR:
-      return dateToUse.getHours() < 12
+      return dateToUse.getHours() < 13
         ? `${dateToUse.getHours()}`
         : `${dateToUse.getHours() - 12}`;
     case MINUTE:

@@ -1,76 +1,64 @@
 import { useState, useEffect } from "react";
 import { useHistory, Redirect, withRouter } from "react-router-dom";
-import firebase from "firebase";
-import { makeStyles, Button, Typography } from "@material-ui/core";
+import { useSelector, useDispatch } from "react-redux";
+import { makeStyles, Button } from "@material-ui/core";
 
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
-import firebaseDB from "utils/firebaseInstance";
+import {
+  editJournalAction,
+  writeJournalAction,
+  setRedirectPath,
+} from "reduxStore/actions/journalActions";
 
 export default withRouter(function Write({ match }) {
   const [messageInputValue, setMessageInputValue] = useState("");
   const [isDataSet, setIsDataSet] = useState(false);
+
   const { userData } = useAuthStateValue()[0];
+
   const history = useHistory();
+
   const classes = useStyles();
+
+  const journals = useSelector((state) => state.journalReducer.journals);
+  const journalWritten = useSelector(
+    (state) => state.journalReducer.journalWritten
+  );
+
+  const reduxDispatch = useDispatch();
 
   useEffect(() => {
     if (match.params.docId && userData) {
-      getJournal(userData.uid, match.params.docId);
+      getJournalOnLoad(journals, match.params.docId);
     }
-    return () => getJournal;
-  }, [userData, match]);
+  }, [journals, userData, match]);
+
+  // useEffect(() => {
+  //   return () => {
+  //     setIsDataSet(false);
+  //     setMessageInputValue("");
+  //   };
+  // }, []);
 
   useEffect(() => {
-    return () => {
-      setIsDataSet(false);
-      setMessageInputValue("");
-    };
-  }, []);
+    if (!userData || (journals && journalWritten)) {
+      history.push("/");
+    }
+    return () => setMessageInputValue("");
+  }, [journals, userData, journalWritten, history]);
 
-  const editJournal = () => {
-    firebaseDB
-      .collection("users")
-      .doc(userData.uid)
-      .collection("daily-journals")
-      .doc(match.params.docId)
-      .update({
-        journal: messageInputValue,
-      })
-      .then(() => {
-        setIsDataSet(true);
-      })
-      .catch((err) => console.log(err));
+  const editJournal = (userData, urlDocId, messageInputValue) => {
+    reduxDispatch(editJournalAction(userData, urlDocId, messageInputValue));
   };
 
-  const writeNewJournal = () => {
-    firebaseDB
-      .collection("users")
-      .doc(userData.uid)
-      .collection("daily-journals")
-      .add({
-        journal: messageInputValue,
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      })
-      .then(() => {
-        setIsDataSet(true);
-      })
-      .catch((err) => console.log(err));
+  const writeNewJournal = (userData, messageInputValue) => {
+    reduxDispatch(writeJournalAction(userData, messageInputValue));
   };
 
-  const getJournal = (uid, docId) => {
-    firebaseDB
-      .collection("users")
-      .doc(uid)
-      .collection("daily-journals")
-      .doc(docId)
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          setMessageInputValue(doc.data().journal);
-        } else {
-          console.log("No such document!");
-        }
-      });
+  const getJournalOnLoad = (journalsArray, urlDocId) => {
+    journalsArray.filter(
+      (each) => each.id === urlDocId && setMessageInputValue(each.data.journal)
+    );
   };
 
   const onChangeHandler = (e) => {
@@ -86,51 +74,51 @@ export default withRouter(function Write({ match }) {
     if (userData && messageInputValue) {
       if (match.params.docId) {
         // Edit
-        editJournal();
+        editJournal(userData, match.params.docId, messageInputValue);
       } else {
         // Write new
-        writeNewJournal();
+        writeNewJournal(userData, messageInputValue);
       }
     }
   };
 
   return (
-    <>
-      {isDataSet || !userData ? (
-        <Redirect to='/' />
-      ) : (
-        <div className={classes.write}>
-          <form className={classes.form}>
-            <textarea
-              autoFocus
-              className={classes.textArea}
-              rows='1'
-              placeholder='Write your thoughts here...'
-              name='messageText'
-              value={messageInputValue}
-              onChange={onChangeHandler}
-            />
-          </form>
+    // <>
+    //   {journalWritten || !userData ? (
+    //     <Redirect to='/' />
+    //   ) : (
+    <div className={classes.write}>
+      <form className={classes.form}>
+        <textarea
+          autoFocus
+          className={classes.textArea}
+          rows='1'
+          placeholder='Write your thoughts here...'
+          name='messageText'
+          value={messageInputValue}
+          onChange={onChangeHandler}
+        />
+      </form>
 
-          <div className={classes.buttonContainer}>
-            <Button
-              variant='outlined'
-              className={classes.saveButton}
-              onClick={onSaveHandler}
-            >
-              save
-            </Button>
-            <Button
-              variant='outlined'
-              className={classes.cancelButton}
-              onClick={onCancelHandler}
-            >
-              cancel
-            </Button>
-          </div>
-        </div>
-      )}
-    </>
+      <div className={classes.buttonContainer}>
+        <Button
+          variant='outlined'
+          className={classes.saveButton}
+          onClick={onSaveHandler}
+        >
+          save
+        </Button>
+        <Button
+          variant='outlined'
+          className={classes.cancelButton}
+          onClick={onCancelHandler}
+        >
+          cancel
+        </Button>
+      </div>
+    </div>
+    //   )}
+    // </>
   );
 });
 

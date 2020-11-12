@@ -1,55 +1,61 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link, useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { makeStyles, Button, Typography } from "@material-ui/core";
 import { AddCircle } from "@material-ui/icons";
 
 import JournalDisplay from "components/journalDisplay/JournalDisplay";
 import ContentCard from "components/contentCard/ContentCard";
-import firebaseDB from "utils/firebaseInstance";
+// import firebaseDB from "shared/firebaseInstance";
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
+import {
+  // getJournalsAction,
+  deleteAllJournalAction,
+} from "reduxStore/actions/journalActions";
 
 export default function Home() {
   const { userData, userDataError } = useAuthStateValue()[0];
-  const [journalData, setJournalData] = useState([]);
+
   const [selectedJournalIndex, setSelectedJournalIndex] = useState(0);
+
   const history = useHistory();
+
   const classes = useStyles();
 
-  useEffect(() => {
-    if (userData) {
-      firebaseDB
-        .collection("users")
-        .doc(userData.uid)
-        .collection("daily-journals")
-        .orderBy("timestamp", "desc")
-        .onSnapshot((snapshot) =>
-          setJournalData(
-            snapshot.docs.map((doc) => {
-              return {
-                id: doc.id,
-                data: doc.data(),
-              };
-            })
-          )
-        );
-    }
-  }, [userData]);
+  const dispatch = useDispatch();
 
-  const getJournal = (dataIndex) => {
+  const journalsData = useSelector((state) => state.journalReducer.journals);
+
+  // const onGetJournals = useCallback(
+  //   (userData) => {
+  //     dispatch(getJournalsAction(userData));
+  //   },
+  //   [dispatch]
+  // );
+
+  const onDeleteJournal = useCallback(
+    (userData, docId) => {
+      dispatch(deleteAllJournalAction(userData, docId));
+    },
+    [dispatch]
+  );
+
+  // useEffect(() => {
+  //   if (userData) {
+  //     onGetJournals(userData);
+  //   }
+  // }, [onGetJournals, userData]);
+
+  const getJournal = useCallback((dataIndex) => {
     setSelectedJournalIndex(dataIndex);
-  };
+  }, []);
 
   const onEditHandler = (docId) => {
     history.push(`/write/${docId}`);
   };
 
   const onDeleteHandler = (docId) => {
-    firebaseDB
-      .collection("users")
-      .doc(userData.uid)
-      .collection("daily-journals")
-      .doc(docId)
-      .delete();
+    onDeleteJournal(userData, docId);
   };
 
   const introMessage = (
@@ -80,7 +86,7 @@ export default function Home() {
           <div className={classes.container}>
             {/* Left side */}
             <div className={classes.cardContainer}>
-              {journalData.map((data, i) => (
+              {journalsData.map((data, i) => (
                 <ContentCard
                   key={i}
                   dataIndex={i}
@@ -95,7 +101,7 @@ export default function Home() {
             {/* Right side */}
             <JournalDisplay
               classes={classes}
-              journalData={journalData}
+              journalsData={journalsData}
               selectedJournalIndex={selectedJournalIndex}
             />
           </div>

@@ -1,12 +1,16 @@
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { Typography, Button } from "@material-ui/core";
 
-import { authService } from "utils/firebaseInstance";
-import { LOG_OUT } from "hooks/actionType/actionType";
+import { authService } from "shared/firebaseInstance";
+import { LOG_OUT } from "shared/actionTypes/actionTypes";
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
+import { emptyJournalsOnLogOut } from "reduxStore/actions/journalActions";
 
 export default function Authentication({ classes }) {
   const [{ userData }, dispatch] = useAuthStateValue();
+
+  const reduxDispatch = useDispatch();
 
   const onLogOutHandler = () => {
     // Sign out of firebase auth
@@ -15,6 +19,7 @@ export default function Authentication({ classes }) {
     dispatch({
       type: LOG_OUT,
     });
+    reduxDispatch(emptyJournalsOnLogOut());
   };
 
   const userName = userData ? (

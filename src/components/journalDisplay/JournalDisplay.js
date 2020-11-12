@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { Typography } from "@material-ui/core";
-import { getDate } from "utils/getDate";
+import { getDate } from "shared/getDate";
 
 export default function JournalDisplay({
   classes,
-  journalData,
+  journalsData,
   selectedJournalIndex,
 }) {
   const [scrolled, setScrolled] = useState(false);
@@ -24,14 +24,14 @@ export default function JournalDisplay({
     }
   };
 
-  const journalContent = journalData[selectedJournalIndex]?.data.journal;
-  const timestamp = journalData[selectedJournalIndex]?.data.timestamp;
+  const journalContent = journalsData[selectedJournalIndex]?.data.journal;
+  const timestamp = journalsData[selectedJournalIndex]?.data.timestamp;
   const { year, month, date, day, hour, minute, term } = getDate(timestamp);
   const customStyle = { position: scrolled ? "sticky" : "relative" };
 
   return (
     <>
-      {journalData && timestamp && (
+      {journalsData && timestamp && (
         <div className={classes.journalContainer} ref={journalRef}>
           <div className={classes.journalContent} style={customStyle}>
             <Typography
