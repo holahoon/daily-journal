@@ -7,6 +7,7 @@ import { AddCircle } from "@material-ui/icons";
 import JournalDisplay from "components/journalDisplay/JournalDisplay";
 import ContentCard from "components/contentCard/ContentCard";
 import Spinner from "components/UI/Spinner";
+import DialogModal from "components/dialogModal/DialogModal";
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 import { deleteAllJournalAction } from "reduxStore/actions/journalActions";
 
@@ -14,6 +15,8 @@ export default function Home() {
   const { userData, userDataError } = useAuthStateValue()[0];
 
   const [selectedJournalIndex, setSelectedJournalIndex] = useState(0);
+  const [journalIdToDelete, setJournalIdToDelete] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const history = useHistory();
 
@@ -39,8 +42,20 @@ export default function Home() {
     history.push(`/write/${docId}`);
   };
 
-  const onDeleteHandler = (docId) => {
-    onDeleteJournal(userData, docId);
+  const onDeleteHandler = () => {
+    if (isModalOpen) {
+      onDeleteJournal(userData, journalIdToDelete);
+      setIsModalOpen(false);
+    }
+  };
+
+  const onOpenModalHandler = (docId) => {
+    setIsModalOpen(true);
+    setJournalIdToDelete(docId);
+  };
+
+  const onCloseModalHandler = () => {
+    setIsModalOpen(false);
   };
 
   const introMessage = (
@@ -61,6 +76,14 @@ export default function Home() {
       ) : (
         <>
           {isLoading && <Spinner />}
+          {isModalOpen && (
+            <DialogModal
+              journalId={journalIdToDelete}
+              isModalOpen={isModalOpen}
+              onDelete={onDeleteHandler}
+              onCloseModal={onCloseModalHandler}
+            />
+          )}
           <div className={classes.home}>
             <div className={classes.writeNew}>
               <Link to='/write'>
@@ -80,7 +103,7 @@ export default function Home() {
                     journalData={data}
                     getJournal={getJournal}
                     onEdit={onEditHandler}
-                    onDelete={onDeleteHandler}
+                    onOpenModal={onOpenModalHandler}
                   />
                 ))}
               </div>

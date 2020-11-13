@@ -17,7 +17,7 @@ export default memo(function ContentCard({
   dataIndex,
   getJournal,
   onEdit,
-  onDelete,
+  onOpenModal,
 }) {
   const classes = useStyles();
 
@@ -80,7 +80,7 @@ export default memo(function ContentCard({
               </Button>
               <Button
                 className={classes.cardButton}
-                onClick={() => onDelete(journalData.id)}
+                onClick={() => onOpenModal(journalData.id)}
               >
                 <Delete className={classes.cardDelete} />
               </Button>
