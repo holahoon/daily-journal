@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/App.css"],"names":[],"mappings":"AAAA,EACE,qBACF,CAEA,UAEE,QACF,CAEA,eAEE,YACF,CAEA,SACE,WACF","file":"main.6403771b.chunk.css","sourcesContent":["* {\n  box-sizing: border-box;\n}\n\nhtml,\nbody {\n  margin: 0;\n}\n\ninput,\ntextarea {\n  outline: none;\n}\n\ntextarea {\n  resize: none;\n}\n"]}
