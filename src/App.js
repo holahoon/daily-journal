@@ -29,7 +29,6 @@ function App() {
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
       if (user) {
-        console.log(user);
         // - If user is found (logged in)
         dispatch({
           type: actionTypes.SET_USER_SUCCESS,

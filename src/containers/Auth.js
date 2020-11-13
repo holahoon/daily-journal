@@ -46,6 +46,11 @@ export default function Auth() {
     await authService
       .createUserWithEmailAndPassword(email, password)
       .then((authUser) => {
+        // Temporarily update displayName(userName) - due to a weird behavior of not returning displayName on signup by Firebase
+        dispatch({
+          type: actionTypes.SET_TEMP_USERNAME,
+          temporaryUserName: userName,
+        });
         // Update displayName when signing up
         return authUser.user.updateProfile({ displayName: userName });
       })
@@ -55,7 +60,7 @@ export default function Auth() {
   const logInHander = async (email, password) => {
     await authService
       .signInWithEmailAndPassword(email, password)
-      .then()
+      .then(() => dispatch({ type: actionTypes.REMOVE_TEMP_USERNAME }))
       .catch((error) => setAuthError(error.message));
   };
 
