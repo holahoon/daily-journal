@@ -6,9 +6,9 @@
 
 **[MyBook link](https://my-book-fe5fe.web.app/)**
 
-Here's a sample email and password to use:
-email: dk@email.com
-pass: dk123123
+Here's a sample email and password to use:  
+email: dk@email.com  
+pass: dk123123  
 
 ## General Info
 
