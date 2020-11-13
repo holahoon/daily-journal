@@ -8,8 +8,8 @@ export default function Navigation() {
 
   return (
     <AppBar position='static' className={classes.header}>
-      <nav className={classes.nav}>
-        <Toolbar>
+      <nav>
+        <Toolbar className={classes.toolbar}>
           <Typography variant='h6' className={classes.myBook}>
             <Link to='/'>MyBook</Link>
           </Typography>
@@ -24,8 +24,9 @@ const useStyles = makeStyles({
   header: {
     backgroundColor: "#98CDC6",
   },
-  nav: {
-    flexGrow: 1,
+  toolbar: {
+    maxWidth: "1280px",
+    margin: "0 auto",
   },
   myBook: {
     flexGrow: 1,

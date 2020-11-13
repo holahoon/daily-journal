@@ -42,7 +42,7 @@ export default function JournalDisplay({
               <span className={classes.date}>{date}</span> {month} {year},{" "}
               <span className={classes.day}>{day}</span>
               <span className={classes.time}>
-                ({hour}:{minute} {term})
+                {hour}:{minute} {term}
               </span>
             </Typography>
 

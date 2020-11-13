@@ -189,7 +189,7 @@ const useStyles = makeStyles({
   time: {
     marginLeft: "20px",
     fontSize: "0.85rem",
-    color: "#4f4f4f",
+    color: "#98CDC6",
   },
   introMessage: {
     position: "absolute",
