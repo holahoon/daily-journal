@@ -33,11 +33,26 @@ export default function Auth() {
     const { userName, email, password } = form;
 
     dispatch({ type: actionTypes.SET_USER_START });
+
     if (isNewAccount) {
-      // - Handle sign up
+      // - sign up
+      if (!userName || !email || !password) {
+        setAuthError("All fields must be entered");
+        dispatch({
+          type: actionTypes.SET_USER_FAIL,
+        });
+        return;
+      }
       signUpHandler(email, password, userName);
     } else {
-      // - Handle log in
+      // - log in
+      if (!email || !password) {
+        setAuthError("All fields must be entered");
+        dispatch({
+          type: actionTypes.SET_USER_FAIL,
+        });
+        return;
+      }
       logInHander(email, password);
     }
   };
@@ -54,14 +69,24 @@ export default function Auth() {
         // Update displayName when signing up
         return authUser.user.updateProfile({ displayName: userName });
       })
-      .catch((error) => setAuthError(error.message));
+      .catch((error) => {
+        setAuthError(error.message);
+        dispatch({
+          type: actionTypes.SET_USER_FAIL,
+        });
+      });
   };
 
   const logInHander = async (email, password) => {
     await authService
       .signInWithEmailAndPassword(email, password)
       .then(() => dispatch({ type: actionTypes.REMOVE_TEMP_USERNAME }))
-      .catch((error) => setAuthError(error.message));
+      .catch((error) => {
+        setAuthError(error.message);
+        dispatch({
+          type: actionTypes.SET_USER_FAIL,
+        });
+      });
   };
 
   const toggleAuthMethod = () => {

@@ -28,31 +28,27 @@ export default function DialogModal({
 
   return (
     <Dialog open={isModalOpen}>
-      <DialogTitle className={classes.title}>Wait!</DialogTitle>
+      <DialogTitle className={classes.title}>Delete Journal</DialogTitle>
 
       <DialogContent>
         <DialogContentText>
           Are you sure you want to delete the journal created on
         </DialogContentText>
         <DialogContentText className={classes.dateText}>
-          <span>{date}</span> {month} {year}, {day} @ {hour}:{minute} {term}
+          {date} {month} {year}, {day} <span>@</span> {hour}:{minute} {term}
         </DialogContentText>
       </DialogContent>
 
       <DialogActions>
+        <Button onClick={onCloseModal} className={classes.buttonCancel}>
+          Cancel
+        </Button>
         <Button
           onClick={onDelete}
-          variant='outlined'
+          variant='contained'
           className={classes.buttonDelete}
         >
           Delete
-        </Button>
-        <Button
-          onClick={onCloseModal}
-          variant='outlined'
-          className={classes.buttonCancel}
-        >
-          Cancel
         </Button>
       </DialogActions>
     </Dialog>
@@ -61,7 +57,9 @@ export default function DialogModal({
 
 const useStyles = makeStyles({
   title: {
-    color: "#EF6663",
+    color: "#6d6d6d",
+    paddingTop: "25px",
+    paddingBottom: "5px",
   },
   dateText: {
     textAlign: "center",
@@ -72,9 +70,16 @@ const useStyles = makeStyles({
     },
   },
   buttonDelete: {
-    color: "#EF6663",
+    backgroundColor: "#EF6663",
+    color: "#ffffff",
+    "&:hover": {
+      backgroundColor: "#EF6663",
+    },
   },
   buttonCancel: {
     color: "#CFB491",
+    "&:hover": {
+      backgroundColor: "#ffffff",
+    },
   },
 });
