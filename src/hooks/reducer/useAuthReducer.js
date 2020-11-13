@@ -4,6 +4,7 @@ import * as actionTypes from "shared/actionTypes/actionTypes";
 export const initialState = {
   userData: null,
   userDataError: false,
+  temporaryUserName: null,
   loading: false,
 };
 
@@ -27,7 +28,17 @@ const useAuthReducer = (state = initialState, action) => {
     case actionTypes.SET_USER_FAIL:
       return { ...state, userData: null, userDataError: true, loading: false };
     case actionTypes.LOG_OUT:
-      return { ...state, userData: null, userDataError: false, loading: false };
+      return {
+        ...state,
+        userData: null,
+        userDataError: false,
+        temporaryUserName: null,
+        loading: false,
+      };
+    case actionTypes.SET_TEMP_USERNAME:
+      return { ...state, temporaryUserName: action.temporaryUserName };
+    case actionTypes.REMOVE_TEMP_USERNAME:
+      return { ...state, temporaryUserName: null };
     default:
       return state;
   }

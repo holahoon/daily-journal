@@ -8,7 +8,7 @@ import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 import { emptyJournalsOnLogOut } from "reduxStore/actions/journalActions";
 
 export default function Authentication({ classes }) {
-  const [{ userData }, dispatch] = useAuthStateValue();
+  const [{ userData, temporaryUserName }, dispatch] = useAuthStateValue();
 
   const reduxDispatch = useDispatch();
 
@@ -22,9 +22,12 @@ export default function Authentication({ classes }) {
     reduxDispatch(emptyJournalsOnLogOut());
   };
 
-  const userName = userData ? (
+  const toggleUserName =
+    userData && userData.displayName ? userData.displayName : temporaryUserName;
+
+  const toggleButton = userData ? (
     <Typography variant='h6' className={classes.userName}>
-      {userData.displayName}
+      {toggleUserName}
     </Typography>
   ) : (
     <Link to='/auth' className={classes.logIn}>
@@ -32,14 +35,16 @@ export default function Authentication({ classes }) {
     </Link>
   );
 
+  const logOutButton = userData && (
+    <Button className={classes.logOut} onClick={onLogOutHandler}>
+      log out
+    </Button>
+  );
+
   return (
     <div className={classes.container}>
-      {userName}
-      {userData && (
-        <Button className={classes.logOut} onClick={onLogOutHandler}>
-          log out
-        </Button>
-      )}
+      {toggleButton}
+      {logOutButton}
     </div>
   );
 }
