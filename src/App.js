@@ -52,7 +52,6 @@ function App() {
     }
   }, [onGetJournals, userData]);
 
-  console.log("[App.js]");
   return (
     <>
       <AppRouter />
