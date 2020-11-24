@@ -16,6 +16,7 @@ import useAuthState from "hooks/useState/useAuthState";
 import { authService } from "shared/firebaseInstance";
 import * as actionTypes from "shared/actionTypes/actionTypes";
 import Spinner from "components/UI/Spinner";
+import InputBox from "components/inputBox/InputBox";
 
 export default function Auth() {
   const [{ userData, loading }, dispatch] = useAuthStateValue();
@@ -57,8 +58,8 @@ export default function Auth() {
     }
   };
 
-  const signUpHandler = async (email, password, userName) => {
-    await authService
+  const signUpHandler = (email, password, userName) => {
+    authService
       .createUserWithEmailAndPassword(email, password)
       .then((authUser) => {
         // Temporarily update displayName(userName) - due to a weird behavior of not returning displayName on signup by Firebase
@@ -77,8 +78,8 @@ export default function Auth() {
       });
   };
 
-  const logInHander = async (email, password) => {
-    await authService
+  const logInHander = (email, password) => {
+    authService
       .signInWithEmailAndPassword(email, password)
       .then(() => dispatch({ type: actionTypes.REMOVE_TEMP_USERNAME }))
       .catch((error) => {
@@ -101,48 +102,34 @@ export default function Auth() {
       <Paper elevation={2} className={classes.paper}>
         <FormControl autoComplete='off' fullWidth className={classes.form}>
           {isNewAccount && (
-            <Box
-              display='flex'
-              alignItems='center'
-              className={classes.userNameBox}
-            >
-              <PersonAdd />
-              <TextField
-                label='User Name'
-                variant='outlined'
-                type='text'
-                name='userName'
-                value={form.userName}
-                onChange={onChangeHandler}
-              />
-            </Box>
-          )}
-          <Box display='flex' alignItems='center' className={classes.emailBox}>
-            <Face />
-            <TextField
-              label='Email'
-              variant='outlined'
+            <InputBox
+              classes={classes}
+              icon='personAddIcon'
+              label='User Name'
               type='text'
-              name='email'
-              value={form.email}
-              onChange={onChangeHandler}
+              name='userName'
+              form={form.userName}
+              onChangeHandler={onChangeHandler}
             />
-          </Box>
-          <Box
-            display='flex'
-            alignItems='center'
-            className={classes.passwordBox}
-          >
-            <Fingerprint />
-            <TextField
-              label='Password'
-              variant='outlined'
-              type='password'
-              name='password'
-              value={form.password}
-              onChange={onChangeHandler}
-            />
-          </Box>
+          )}
+          <InputBox
+            classes={classes}
+            icon='faceIcon'
+            label='Email'
+            type='text'
+            name='email'
+            form={form.email}
+            onChangeHandler={onChangeHandler}
+          />
+          <InputBox
+            classes={classes}
+            icon='fingerPrintIcon'
+            label='Password'
+            type='password'
+            name='password'
+            form={form.password}
+            onChangeHandler={onChangeHandler}
+          />
           <Button
             variant='outlined'
             className={classes.toggleButton1}
