@@ -4,12 +4,10 @@ import {
   makeStyles,
   Paper,
   Box,
-  TextField,
   Button,
   Typography,
   FormControl,
 } from "@material-ui/core";
-import { Face, Fingerprint, PersonAdd } from "@material-ui/icons";
 
 import { useAuthStateValue } from "hooks/context/AuthStateProvider";
 import useAuthState from "hooks/useState/useAuthState";
